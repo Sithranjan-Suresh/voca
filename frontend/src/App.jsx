@@ -1,20 +1,46 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import ProfileToggle from './components/ProfileToggle'
 import ContrastModeToggle from './components/ContrastModeToggle'
 import CategoryGrid from './components/CategoryGrid'
 import SelectionTray from './components/SelectionTray'
 import GenerationResultPanel from './components/GenerationResultPanel'
+import OnboardingSplash from './components/OnboardingSplash'
+import Toast from './components/Toast'
 import './App.css'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const PROFILE_NAMES = { jordan: 'Jordan', alex: 'Alex' }
 
 export default function App() {
   const [activeProfileId, setActiveProfileId] = useState('jordan')
   const [contrastMode, setContrastMode] = useState(false)
   const [selectedConceptIds, setSelectedConceptIds] = useState([])
-  const [generationStatus, setGenerationStatus] = useState('idle') // idle | loading | success | error
+  const [generationStatus, setGenerationStatus] = useState('idle')
   const [sentenceOptions, setSentenceOptions] = useState([])
   const [rejectedSentences, setRejectedSentences] = useState([])
+  const [toast, setToast] = useState(null)
+  const [showSplash, setShowSplash] = useState(true)
+  const [streamingText, setStreamingText] = useState([]) // array of partial sentences while streaming
+  const isFirstMount = useRef(true)
+
+  // Item 1+2: auto-clear results and show toast on profile switch
+  useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false
+      return
+    }
+    setSentenceOptions([])
+    setGenerationStatus('idle')
+    setRejectedSentences([])
+    setStreamingText([])
+    const name = PROFILE_NAMES[activeProfileId] || activeProfileId
+    showToast(`Switched to ${name} — tap Generate to hear their voice`)
+  }, [activeProfileId])
+
+  function showToast(message) {
+    setToast(message)
+    setTimeout(() => setToast(null), 3000)
+  }
 
   function toggleConcept(id) {
     setSelectedConceptIds(prev =>
@@ -26,8 +52,20 @@ export default function App() {
     setSelectedConceptIds(prev => prev.filter(x => x !== id))
   }
 
+  function clearAll() {
+    setSelectedConceptIds([])
+    setSentenceOptions([])
+    setGenerationStatus('idle')
+    setRejectedSentences([])
+    setStreamingText([])
+  }
+
+  // Item 7: streaming generation
   async function handleGenerate(excluded = []) {
     setGenerationStatus('loading')
+    setSentenceOptions([])
+    setStreamingText([])
+
     try {
       const res = await fetch(`${API_BASE}/generate`, {
         method: 'POST',
@@ -38,13 +76,68 @@ export default function App() {
           excluded_sentences: excluded,
         }),
       })
-      const data = await res.json()
+
       if (!res.ok) {
         setGenerationStatus('error')
         return
       }
-      setSentenceOptions(data.sentences)
-      setGenerationStatus('success')
+
+      const contentType = res.headers.get('content-type') || ''
+
+      // Streaming path
+      if (contentType.includes('text/event-stream') || res.body) {
+        const reader = res.body.getReader()
+        const decoder = new TextDecoder()
+        let buffer = ''
+        const sentences = []
+
+        setGenerationStatus('streaming')
+
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          buffer += decoder.decode(value, { stream: true })
+
+          const lines = buffer.split('\n')
+          buffer = lines.pop()
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const raw = line.slice(6).trim()
+              if (raw === '[DONE]') continue
+              try {
+                const parsed = JSON.parse(raw)
+                if (parsed.sentences) {
+                  setSentenceOptions(parsed.sentences)
+                  setGenerationStatus('success')
+                } else if (parsed.partial) {
+                  // partial streaming update
+                  const idx = parsed.index ?? 0
+                  sentences[idx] = parsed.partial
+                  setStreamingText([...sentences])
+                  setGenerationStatus('streaming')
+                }
+              } catch {}
+            }
+          }
+        }
+
+        // If we got here with no sentences from SSE, try parsing buffer as JSON
+        if (buffer.trim()) {
+          try {
+            const data = JSON.parse(buffer.trim())
+            if (data.sentences) {
+              setSentenceOptions(data.sentences)
+              setGenerationStatus('success')
+            }
+          } catch {}
+        }
+      } else {
+        // Non-streaming fallback
+        const data = await res.json()
+        setSentenceOptions(data.sentences || [])
+        setGenerationStatus('success')
+      }
     } catch {
       setGenerationStatus('error')
     }
@@ -66,36 +159,48 @@ export default function App() {
   }
 
   return (
-    <div className={`app${contrastMode ? ' high-contrast' : ''}`}>
-      <header className="app-header">
-        <h1 className="app-title">Voca</h1>
-        <div className="header-controls">
-          <ProfileToggle activeProfileId={activeProfileId} onChange={setActiveProfileId} />
-          <ContrastModeToggle enabled={contrastMode} onToggle={() => setContrastMode(v => !v)} />
-        </div>
-      </header>
+    <>
+      {showSplash && <OnboardingSplash onDismiss={() => setShowSplash(false)} />}
+      {toast && <Toast message={toast} />}
 
-      <main className="app-main">
-        <CategoryGrid
-          selectedConceptIds={selectedConceptIds}
-          onToggle={toggleConcept}
-        />
+      <div className={`app${contrastMode ? ' high-contrast' : ''}`}>
+        <header className="app-header">
+          <div className="app-brand">
+            <h1 className="app-title">Voca</h1>
+            <span className="app-tagline">A voice for 2M+ Americans with aphasia</span>
+          </div>
+          <div className="header-controls">
+            <ProfileToggle activeProfileId={activeProfileId} onChange={setActiveProfileId} />
+            <ContrastModeToggle enabled={contrastMode} onToggle={() => setContrastMode(v => !v)} />
+          </div>
+        </header>
 
-        <SelectionTray
-          selectedConceptIds={selectedConceptIds}
-          onDeselect={deselectConcept}
-          onGenerate={handleNewGeneration}
-        />
-
-        {generationStatus !== 'idle' && (
-          <GenerationResultPanel
-            status={generationStatus}
-            sentences={sentenceOptions}
-            onReject={handleReject}
-            onRetry={handleRetry}
+        <main className="app-main">
+          <CategoryGrid
+            selectedConceptIds={selectedConceptIds}
+            onToggle={toggleConcept}
           />
-        )}
-      </main>
-    </div>
+
+          <SelectionTray
+            selectedConceptIds={selectedConceptIds}
+            onDeselect={deselectConcept}
+            onGenerate={handleNewGeneration}
+            onClearAll={clearAll}
+          />
+
+          {generationStatus !== 'idle' && (
+            <GenerationResultPanel
+              status={generationStatus}
+              sentences={sentenceOptions}
+              streamingText={streamingText}
+              activeProfileId={activeProfileId}
+              profileNames={PROFILE_NAMES}
+              onReject={handleReject}
+              onRetry={handleRetry}
+            />
+          )}
+        </main>
+      </div>
+    </>
   )
 }

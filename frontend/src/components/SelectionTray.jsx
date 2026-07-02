@@ -1,6 +1,6 @@
 import { CONCEPTS } from '../data/concepts'
 
-export default function SelectionTray({ selectedConceptIds, onDeselect, onGenerate }) {
+export default function SelectionTray({ selectedConceptIds, onDeselect, onGenerate, onClearAll }) {
   const selected = selectedConceptIds.map(id => CONCEPTS.find(c => c.id === id)).filter(Boolean)
   const canGenerate = selectedConceptIds.length >= 2
 
@@ -26,6 +26,11 @@ export default function SelectionTray({ selectedConceptIds, onDeselect, onGenera
       </div>
 
       <div className="tray-actions">
+        {selected.length > 0 && (
+          <button className="btn-clear" onClick={onClearAll} aria-label="Clear all selections">
+            Clear
+          </button>
+        )}
         {!canGenerate && selectedConceptIds.length > 0 && (
           <p className="tray-hint" role="status">Select at least 2 ideas</p>
         )}
