@@ -27,6 +27,7 @@ export default function App() {
   const [showSplash, setShowSplash] = useState(true)
   const [streamingText, setStreamingText] = useState([])
   const isFirstMount = useRef(true)
+  const isSwitchingProfile = useRef(false)
   const trayRef = useRef(null)
   const resultRef = useRef(null)
 
@@ -34,6 +35,10 @@ export default function App() {
   useEffect(() => {
     if (isFirstMount.current) {
       isFirstMount.current = false
+      return
+    }
+    if (isSwitchingProfile.current) {
+      isSwitchingProfile.current = false
       return
     }
     setSentenceOptions([])
@@ -76,7 +81,7 @@ export default function App() {
     setTimeout(() => trayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100)
   }
 
-  async function handleGenerate(excluded = []) {
+  async function handleGenerate(excluded = [], profileOverride = null) {
     setGenerationStatus('loading')
     setSentenceOptions([])
     setStreamingText([])
@@ -86,7 +91,7 @@ export default function App() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          profile_id: activeProfileId,
+          profile_id: profileOverride ?? activeProfileId,
           concept_ids: selectedConceptIds,
           excluded_sentences: excluded,
         }),
@@ -221,7 +226,12 @@ export default function App() {
               profileNames={PROFILE_NAMES}
               onReject={handleReject}
               onRetry={handleRetry}
-              onSwitchProfile={() => setActiveProfileId(activeProfileId === 'jordan' ? 'alex' : 'jordan')}
+              onSwitchProfile={() => {
+                const nextProfile = activeProfileId === 'jordan' ? 'alex' : 'jordan'
+                isSwitchingProfile.current = true
+                setActiveProfileId(nextProfile)
+                setTimeout(() => handleGenerate(rejectedSentences, nextProfile), 50)
+              }}
             />
             </div>
           )}

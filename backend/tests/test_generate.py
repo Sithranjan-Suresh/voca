@@ -1,42 +1,58 @@
-"""Smoke test: verify sentence generation pipeline parses correctly."""
+"""Smoke tests for the generation pipeline."""
 import os
+import sys
 import pytest
 
-# Skip if no API key present (CI without secrets)
-pytestmark = pytest.mark.skipif(
-    not os.getenv("GROQ_API_KEY"),
-    reason="GROQ_API_KEY not set",
-)
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from services.groq_client import generate_sentences
+from services.groq_client import _parse_sentences
 
 
-def test_generate_sentences_returns_three():
-    sentences = generate_sentences.__wrapped__ if hasattr(generate_sentences, '__wrapped__') else generate_sentences
-    result = generate_sentences("Return exactly 3 sentences numbered like this, one per line, nothing else:\n1. I need water right now.\n2. Can someone get me some water?\n3. I'm thirsty and need help.\n\nConcepts: Water, Help")
-    assert isinstance(result, list)
+def test_parse_sentences_numbered_list():
+    """Parser correctly extracts 3 sentences from numbered output."""
+    raw = "1. My chest is hurting right now.\n2. I need help immediately.\n3. Please call for assistance."
+    result = _parse_sentences(raw)
     assert len(result) == 3
-    assert all(isinstance(s, str) and len(s) > 5 for s in result)
+    assert result[0] == "My chest is hurting right now."
+    assert result[1] == "I need help immediately."
+    assert result[2] == "Please call for assistance."
+
+
+def test_parse_sentences_strips_quotes():
+    """Parser strips surrounding quotes from sentences."""
+    raw = '1. "First sentence here."\n2. Second sentence.\n3. Third sentence.'
+    result = _parse_sentences(raw)
+    assert result[0] == "First sentence here."
 
 
 def test_parse_emergency_single_concept():
-    """Emergency concepts work with single-concept generation."""
+    """Emergency concepts produce the correct label."""
     from data.concepts import get_labels
-    labels = get_labels(["chest_pain"])
-    assert labels == ["Chest Pain"]
+    assert get_labels(["chest_pain"]) == ["Chest Pain"]
+    assert get_labels(["cant_breathe"]) == ["Can't Breathe"]
 
 
 def test_basics_concepts_present():
-    """Basics vocabulary is registered."""
+    """All Basics vocabulary IDs are registered."""
     from data.concepts import CONCEPT_MAP
     for cid in ["yes", "no", "please", "thank_you", "stop", "wait", "more", "again"]:
-        assert cid in CONCEPT_MAP, f"Missing concept: {cid}"
+        assert cid in CONCEPT_MAP, f"Missing Basics concept: {cid}"
 
 
 def test_profiles_distinct():
-    """Jake and Maria have meaningfully different phrasing styles."""
+    """Jake and Maria have meaningfully different phrasing styles and samples."""
     from data.profiles import get_profile
     jake = get_profile("jordan")
     maria = get_profile("alex")
     assert jake["phrasing_style"] != maria["phrasing_style"]
     assert jake["sample_phrases"] != maria["sample_phrases"]
+
+
+def test_exclusion_block_in_prompt():
+    """Excluded sentences appear in the generated prompt."""
+    from data.profiles import get_profile
+    from services.prompt_builder import build_prompt
+    profile = get_profile("jordan")
+    prompt = build_prompt(["water", "help"], profile, ["I need water right now."])
+    assert "I need water right now." in prompt
+    assert "do NOT repeat" in prompt

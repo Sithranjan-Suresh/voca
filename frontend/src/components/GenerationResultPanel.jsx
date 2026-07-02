@@ -27,9 +27,10 @@ export default function GenerationResultPanel({
     const displaySentences = streamingText.length > 0 ? streamingText : sentences
     return (
       <motion.div {...panelAnim} className="result-panel" role="region" aria-live="polite">
-        <p className="result-label">
+        <div className="result-label-row">
           <span className="profile-voice-badge">In {profileLabel}'s voice</span>
-        </p>
+          <span className="result-subline">Reconstructed from your concepts — not predicted text</span>
+        </div>
         {displaySentences.map((s, i) => (
           <div key={i} className="sentence-option sentence-streaming">
             <p className="sentence-text">{s}<span className="cursor-blink" aria-hidden="true">|</span></p>

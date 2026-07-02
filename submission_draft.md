@@ -14,7 +14,7 @@ Existing AAC (Augmentative and Alternative Communication) tools like TouchChat a
 ## Solution
 Voca inverts the AAC model entirely:
 
-1. **Tap concepts** — 41 concept icons across 8 categories (Emergency, People, Food, Places, Needs, Health, Emotions, Body). No typing. No sentence construction.
+1. **Tap concepts** — 49 concept icons across 9 categories (Emergency, Basics, People, Food, Places, Needs, Health, Emotions, Body). No typing. No sentence construction.
 2. **Generate** — Voca sends the concept set plus an active user profile to Llama 3.3 70B via Groq. The LLM reconstructs what the person *meant* to say as three complete, natural-language options, streamed progressively.
 3. **Speak** — Tap any option to speak it aloud via ElevenLabs HD voice (per-profile voice mapping) or Web Speech API fallback. The sentence sounds like *you*, not a robot.
 
@@ -23,6 +23,7 @@ Voca inverts the AAC model entirely:
 - **Live persona system.** Switch between Jake (casual, TBI recovery, Josh voice) and Maria (formal, stroke survivor, Rachel voice). Identical concept taps → genuinely different phrasing, different voice.
 - **Emergency-first.** Life-critical phrases (Chest Pain, Can't Breathe, Call 911) are always visible and speak instantly with no AI wait.
 - **No-repeat regeneration.** Rejected sentences are permanently excluded from subsequent generations.
+- **Basics vocabulary.** Yes, No, Please, Thank You, Stop, Wait, More, Repeat — instant single-tap responses for high-frequency communication needs.
 - **PWA.** Installable on mobile, works offline for emergency phrases.
 
 ## Tech stack
