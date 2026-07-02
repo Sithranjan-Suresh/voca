@@ -63,6 +63,11 @@ export default function GenerationResultPanel({
           <span className="profile-voice-badge">In {profileLabel}'s voice</span>
           <span className="result-subline">Reconstructed from your concepts — not predicted text</span>
         </div>
+        {onSwitchProfile && (
+          <button className="btn-switch-profile" onClick={onSwitchProfile}>
+            Try {otherProfileLabel}'s voice →
+          </button>
+        )}
         <AnimatePresence>
           {sentences.map((sentence, i) => (
             <motion.div
@@ -79,11 +84,6 @@ export default function GenerationResultPanel({
             </motion.div>
           ))}
         </AnimatePresence>
-        {onSwitchProfile && (
-          <button className="btn-switch-profile" onClick={onSwitchProfile}>
-            Try {otherProfileLabel}'s voice →
-          </button>
-        )}
       </motion.div>
     )
   }
