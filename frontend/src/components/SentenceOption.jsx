@@ -1,15 +1,43 @@
 import { useState } from 'react'
 
-export default function SentenceOption({ sentence, onReject }) {
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
+export default function SentenceOption({ sentence, profileId, onReject }) {
   const [speaking, setSpeaking] = useState(false)
 
-  function handleSpeak() {
-    if (!('speechSynthesis' in window)) return
+  async function handleSpeak() {
+    if (speaking) return
+    setSpeaking(true)
+
+    // Try ElevenLabs via backend first
+    try {
+      const res = await fetch(`${API_BASE}/tts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: sentence, profile_id: profileId }),
+      })
+
+      if (res.ok) {
+        const blob = await res.blob()
+        const url = URL.createObjectURL(blob)
+        const audio = new Audio(url)
+        audio.onended = () => { setSpeaking(false); URL.revokeObjectURL(url) }
+        audio.onerror = () => { setSpeaking(false); URL.revokeObjectURL(url); speakFallback() }
+        await audio.play()
+        return
+      }
+    } catch {
+      // fall through to browser TTS
+    }
+
+    speakFallback()
+  }
+
+  function speakFallback() {
+    if (!('speechSynthesis' in window)) { setSpeaking(false); return }
     window.speechSynthesis.cancel()
     const utterance = new SpeechSynthesisUtterance(sentence)
     utterance.rate = 0.95
-    utterance.pitch = 1
-    utterance.onstart = () => setSpeaking(true)
     utterance.onend = () => setSpeaking(false)
     utterance.onerror = () => setSpeaking(false)
     window.speechSynthesis.speak(utterance)
@@ -23,6 +51,7 @@ export default function SentenceOption({ sentence, onReject }) {
         <button
           className={`btn-speak${speaking ? ' speaking' : ''}`}
           onClick={handleSpeak}
+          disabled={speaking}
           aria-label={speaking ? 'Speaking…' : 'Speak this sentence'}
         >
           <span className={`speak-icon${speaking ? ' pulse' : ''}`} aria-hidden="true">🔊</span>

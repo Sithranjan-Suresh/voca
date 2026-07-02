@@ -21,9 +21,10 @@ app.add_middleware(
     allow_headers=["Content-Type"],
 )
 
-from routes import generate, profiles
+from routes import generate, profiles, tts
 app.include_router(generate.router)
 app.include_router(profiles.router)
+app.include_router(tts.router)
 
 
 @app.get("/")

@@ -56,6 +56,7 @@ export default function GenerationResultPanel({
           <SentenceOption
             key={`${sentence}-${i}`}
             sentence={sentence}
+            profileId={activeProfileId}
             onReject={() => onReject(sentence)}
           />
         ))}
