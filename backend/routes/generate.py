@@ -8,6 +8,9 @@ from services.groq_client import generate_sentences, stream_sentences, Generatio
 router = APIRouter()
 
 
+EMERGENCY_IDS = {"chest_pain", "fall", "help_me", "call_emergency", "cant_breathe"}
+
+
 class GenerateRequest(BaseModel):
     profile_id: str = "jordan"
     concept_ids: list[str]
@@ -17,7 +20,9 @@ class GenerateRequest(BaseModel):
 
 @router.post("/generate")
 def generate(req: GenerateRequest):
-    if len(req.concept_ids) < 2:
+    has_emergency = any(c in EMERGENCY_IDS for c in req.concept_ids)
+    min_required = 1 if has_emergency else 2
+    if len(req.concept_ids) < min_required:
         return JSONResponse(
             status_code=400,
             content={

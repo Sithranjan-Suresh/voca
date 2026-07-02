@@ -2,17 +2,18 @@ import { useState, useEffect } from 'react'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8001'
 
-// Check once on load whether ElevenLabs TTS is available
+// Cache only positive results — re-check if previously unavailable
 let elevenLabsAvailable = null
 async function checkElevenLabs() {
-  if (elevenLabsAvailable !== null) return elevenLabsAvailable
+  if (elevenLabsAvailable === true) return true
   try {
     const res = await fetch(`${API_BASE}/tts/status`)
-    elevenLabsAvailable = res.ok
+    elevenLabsAvailable = res.ok ? true : null  // null = retry next time
+    return res.ok
   } catch {
-    elevenLabsAvailable = false
+    elevenLabsAvailable = null
+    return false
   }
-  return elevenLabsAvailable
 }
 
 const SAVED_KEY = 'voca_saved_phrases'
