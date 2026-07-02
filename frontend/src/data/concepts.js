@@ -48,6 +48,16 @@ export const CONCEPTS = [
   { id: "frustrated", label: "Frustrated", category: "Emotions", icon: "frustrated" },
   { id: "grateful",   label: "Grateful",   category: "Emotions", icon: "grateful" },
 
+  // Basics
+  { id: "yes",       label: "Yes",       category: "Basics", icon: "yes" },
+  { id: "no",        label: "No",        category: "Basics", icon: "no" },
+  { id: "please",    label: "Please",    category: "Basics", icon: "please" },
+  { id: "thank_you", label: "Thank You", category: "Basics", icon: "thank_you" },
+  { id: "stop",      label: "Stop",      category: "Basics", icon: "stop" },
+  { id: "wait",      label: "Wait",      category: "Basics", icon: "wait" },
+  { id: "more",      label: "More",      category: "Basics", icon: "more" },
+  { id: "again",     label: "Again",     category: "Basics", icon: "again" },
+
   // Body
   { id: "head",    label: "Head",    category: "Body", icon: "head" },
   { id: "chest",   label: "Chest",   category: "Body", icon: "chest" },
@@ -57,11 +67,12 @@ export const CONCEPTS = [
   { id: "leg",     label: "Leg",     category: "Body", icon: "leg" },
 ]
 
-export const CATEGORIES = ["Emergency", "People", "Food", "Places", "Needs", "Health", "Emotions", "Body"]
+export const CATEGORIES = ["Emergency", "Basics", "People", "Food", "Places", "Needs", "Health", "Emotions", "Body"]
 
 // SVG path data for category tiles (24×24 viewBox, stroke-based)
 // SVG path strings for the 7 category tiles
 export const CATEGORY_SVGS = {
+  Basics:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
   Emergency: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
   People:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
   Food:      `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="2" x2="18" y2="22"/><line x1="14" y1="2" x2="14" y2="7"/><path d="M14 7a4 4 0 0 0 4 4"/><path d="M6 2c0 0-4 3-4 8s4 8 4 8"/><path d="M2 10h8"/></svg>`,

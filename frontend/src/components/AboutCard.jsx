@@ -14,8 +14,9 @@ export default function AboutCard() {
         <span className="about-stat-number">2.5M</span> Americans — <span className="about-stat-number">50M</span> worldwide — live with aphasia after stroke or brain injury.
       </p>
       <p className="about-body">
-        They know <em>exactly</em> what they want to say. They simply can't produce the words.
-        Existing AAC tools still require sentence construction — the very step aphasia makes impossible.
+        Imagine trying to say <em>"my chest hurts"</em> after a stroke — and not being able to find the words.
+        They know exactly what they want to say. Existing AAC tools still require sentence construction:
+        the very step aphasia makes impossible.
       </p>
       <p className="about-differentiator">
         Voca inverts this: tap a few concepts → get a complete, natural sentence → speak.

@@ -35,6 +35,7 @@ export default function SavedPhrases({ profileId }) {
       <p className="saved-phrases-title">
         ★ Saved phrases — {profileId === 'jordan' ? 'Jake' : 'Maria'}
       </p>
+      <p className="saved-phrases-hint">Caregivers: star any generated sentence to pre-load it here for instant access.</p>
       {phrases.map((item, i) => (
         <div key={i} className="saved-phrase-row">
           <p className="saved-phrase-text">{item.text}</p>

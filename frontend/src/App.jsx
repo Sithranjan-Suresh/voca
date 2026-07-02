@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import ProfileToggle from './components/ProfileToggle'
 import ContrastModeToggle from './components/ContrastModeToggle'
 import CategoryGrid from './components/CategoryGrid'
@@ -26,8 +27,10 @@ export default function App() {
   const [toast, setToast] = useState(null)
   const [showSplash, setShowSplash] = useState(true)
   const [streamingText, setStreamingText] = useState([])
+  const [showHowItWorks, setShowHowItWorks] = useState(false)
   const isFirstMount = useRef(true)
   const trayRef = useRef(null)
+  const resultRef = useRef(null)
 
   // Auto-clear results and show toast on profile switch
   useEffect(() => {
@@ -123,6 +126,7 @@ export default function App() {
                 if (parsed.sentences) {
                   setSentenceOptions(parsed.sentences)
                   setGenerationStatus('success')
+                  setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
                 } else if (parsed.partial !== undefined) {
                   const idx = parsed.index ?? 0
                   sentences[idx] = parsed.partial
@@ -147,6 +151,7 @@ export default function App() {
         const data = await res.json()
         setSentenceOptions(data.sentences || [])
         setGenerationStatus('success')
+        setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
       }
     } catch {
       setGenerationStatus('error')
@@ -186,9 +191,21 @@ export default function App() {
         </header>
 
         <main className="app-main">
-          <HowItWorks />
-
           <AboutCard />
+
+          <div className="quickstart-section">
+            <button className="quickstart-toggle" onClick={() => setShowHowItWorks(v => !v)} aria-expanded={showHowItWorks}>
+              <span className="quickstart-toggle-arrow" aria-hidden="true">{showHowItWorks ? '▾' : '▸'}</span>
+              How it works
+            </button>
+            <AnimatePresence>
+              {showHowItWorks && (
+                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.2 }} style={{ overflow: 'hidden' }}>
+                  <HowItWorks />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
           <QuickEmergency />
 
@@ -211,6 +228,7 @@ export default function App() {
           <SavedPhrases profileId={activeProfileId} />
 
           {generationStatus !== 'idle' && (
+            <div ref={resultRef}>
             <GenerationResultPanel
               status={generationStatus}
               sentences={sentenceOptions}
@@ -220,6 +238,7 @@ export default function App() {
               onReject={handleReject}
               onRetry={handleRetry}
             />
+            </div>
           )}
         </main>
       </div>

@@ -1292,3 +1292,11 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
   font-weight: 600;
   color: var(--red);
 }
+
+.saved-phrases-hint {
+  font-size: 11px;
+  color: #737373;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: -4px;
+}

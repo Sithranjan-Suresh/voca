@@ -6,6 +6,16 @@ CONCEPTS = [
     {"id": "call_emergency", "label": "Call 911", "category": "Emergency", "icon": "call_emergency"},
     {"id": "cant_breathe", "label": "Can't Breathe", "category": "Emergency", "icon": "cant_breathe"},
 
+    # Basics — highest-frequency AAC vocabulary
+    {"id": "yes",       "label": "Yes",       "category": "Basics", "icon": "yes"},
+    {"id": "no",        "label": "No",        "category": "Basics", "icon": "no"},
+    {"id": "please",    "label": "Please",    "category": "Basics", "icon": "please"},
+    {"id": "thank_you", "label": "Thank You", "category": "Basics", "icon": "thank_you"},
+    {"id": "stop",      "label": "Stop",      "category": "Basics", "icon": "stop"},
+    {"id": "wait",      "label": "Wait",      "category": "Basics", "icon": "wait"},
+    {"id": "more",      "label": "More",      "category": "Basics", "icon": "more"},
+    {"id": "again",     "label": "Again",     "category": "Basics", "icon": "again"},
+
     # People
     {"id": "friend", "label": "Friend", "category": "People", "icon": "friend"},
     {"id": "doctor", "label": "Doctor", "category": "People", "icon": "doctor"},
