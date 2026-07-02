@@ -1,6 +1,6 @@
 const PROFILES = [
-  { id: 'jordan', label: 'Jordan' },
-  { id: 'alex', label: 'Alex' },
+  { id: 'jordan', label: 'Jake', subtitle: 'Casual · TBI recovery' },
+  { id: 'alex',   label: 'Maria', subtitle: 'Formal · Stroke survivor' },
 ]
 
 export default function ProfileToggle({ activeProfileId, onChange }) {
@@ -12,8 +12,10 @@ export default function ProfileToggle({ activeProfileId, onChange }) {
           className={`profile-btn${activeProfileId === p.id ? ' active' : ''}`}
           onClick={() => onChange(p.id)}
           aria-pressed={activeProfileId === p.id}
+          title={p.subtitle}
         >
-          {p.label}
+          <span className="profile-btn-name">{p.label}</span>
+          <span className="profile-btn-sub">{p.subtitle}</span>
         </button>
       ))}
     </div>

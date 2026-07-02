@@ -6,10 +6,12 @@ import SelectionTray from './components/SelectionTray'
 import GenerationResultPanel from './components/GenerationResultPanel'
 import OnboardingSplash from './components/OnboardingSplash'
 import Toast from './components/Toast'
+import HowItWorks from './components/HowItWorks'
+import QuickStartScenarios from './components/QuickStartScenarios'
 import './App.css'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-const PROFILE_NAMES = { jordan: 'Jordan', alex: 'Alex' }
+const PROFILE_NAMES = { jordan: 'Jake', alex: 'Maria' }
 
 export default function App() {
   const [activeProfileId, setActiveProfileId] = useState('jordan')
@@ -20,10 +22,11 @@ export default function App() {
   const [rejectedSentences, setRejectedSentences] = useState([])
   const [toast, setToast] = useState(null)
   const [showSplash, setShowSplash] = useState(true)
-  const [streamingText, setStreamingText] = useState([]) // array of partial sentences while streaming
+  const [streamingText, setStreamingText] = useState([])
   const isFirstMount = useRef(true)
+  const trayRef = useRef(null)
 
-  // Item 1+2: auto-clear results and show toast on profile switch
+  // Auto-clear results and show toast on profile switch
   useEffect(() => {
     if (isFirstMount.current) {
       isFirstMount.current = false
@@ -60,7 +63,15 @@ export default function App() {
     setStreamingText([])
   }
 
-  // Item 7: streaming generation
+  function handleSelectScenario(conceptIds) {
+    setSelectedConceptIds(conceptIds)
+    setSentenceOptions([])
+    setGenerationStatus('idle')
+    setRejectedSentences([])
+    setStreamingText([])
+    setTimeout(() => trayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100)
+  }
+
   async function handleGenerate(excluded = []) {
     setGenerationStatus('loading')
     setSentenceOptions([])
@@ -84,7 +95,6 @@ export default function App() {
 
       const contentType = res.headers.get('content-type') || ''
 
-      // Streaming path
       if (contentType.includes('text/event-stream') || res.body) {
         const reader = res.body.getReader()
         const decoder = new TextDecoder()
@@ -110,8 +120,7 @@ export default function App() {
                 if (parsed.sentences) {
                   setSentenceOptions(parsed.sentences)
                   setGenerationStatus('success')
-                } else if (parsed.partial) {
-                  // partial streaming update
+                } else if (parsed.partial !== undefined) {
                   const idx = parsed.index ?? 0
                   sentences[idx] = parsed.partial
                   setStreamingText([...sentences])
@@ -122,7 +131,6 @@ export default function App() {
           }
         }
 
-        // If we got here with no sentences from SSE, try parsing buffer as JSON
         if (buffer.trim()) {
           try {
             const data = JSON.parse(buffer.trim())
@@ -133,7 +141,6 @@ export default function App() {
           } catch {}
         }
       } else {
-        // Non-streaming fallback
         const data = await res.json()
         setSentenceOptions(data.sentences || [])
         setGenerationStatus('success')
@@ -176,17 +183,23 @@ export default function App() {
         </header>
 
         <main className="app-main">
+          <HowItWorks />
+
+          <QuickStartScenarios onSelectScenario={handleSelectScenario} />
+
           <CategoryGrid
             selectedConceptIds={selectedConceptIds}
             onToggle={toggleConcept}
           />
 
-          <SelectionTray
-            selectedConceptIds={selectedConceptIds}
-            onDeselect={deselectConcept}
-            onGenerate={handleNewGeneration}
-            onClearAll={clearAll}
-          />
+          <div ref={trayRef}>
+            <SelectionTray
+              selectedConceptIds={selectedConceptIds}
+              onDeselect={deselectConcept}
+              onGenerate={handleNewGeneration}
+              onClearAll={clearAll}
+            />
+          </div>
 
           {generationStatus !== 'idle' && (
             <GenerationResultPanel

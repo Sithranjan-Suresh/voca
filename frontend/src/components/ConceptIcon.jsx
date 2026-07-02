@@ -1,3 +1,5 @@
+import ConceptSVGIcon from './ConceptIcons'
+
 export default function ConceptIcon({ concept, selected, onToggle }) {
   return (
     <button
@@ -6,7 +8,7 @@ export default function ConceptIcon({ concept, selected, onToggle }) {
       aria-pressed={selected}
       aria-label={concept.label}
     >
-      <span className="concept-icon-emoji" aria-hidden="true">{concept.icon}</span>
+      <ConceptSVGIcon id={concept.icon} size={26} />
       <span className="concept-icon-label">{concept.label}</span>
     </button>
   )

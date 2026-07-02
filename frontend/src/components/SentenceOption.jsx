@@ -18,6 +18,7 @@ export default function SentenceOption({ sentence, onReject }) {
   return (
     <div className="sentence-option">
       <p className="sentence-text">{sentence}</p>
+      <p className="sentence-attribution">Reconstructed from your tapped concepts — not predicted text.</p>
       <div className="sentence-actions">
         <button
           className={`btn-speak${speaking ? ' speaking' : ''}`}
@@ -27,14 +28,18 @@ export default function SentenceOption({ sentence, onReject }) {
           <span className={`speak-icon${speaking ? ' pulse' : ''}`} aria-hidden="true">🔊</span>
           {speaking ? 'Speaking…' : 'Speak'}
         </button>
-        <button
-          className="btn-reject"
-          onClick={onReject}
-          disabled={speaking}
-          aria-label="Reject this sentence and get another"
-        >
-          👎
-        </button>
+        <div className="reject-wrapper">
+          <p className="reject-hint">Not right?</p>
+          <button
+            className="btn-reject"
+            onClick={onReject}
+            disabled={speaking}
+            aria-label="Reject this sentence and get another"
+            title="Voca tries a different angle"
+          >
+            👎
+          </button>
+        </div>
       </div>
     </div>
   )

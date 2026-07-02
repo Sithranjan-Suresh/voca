@@ -17,7 +17,7 @@ class GenerationError(Exception):
 
 
 def generate_sentences(prompt: str) -> list[str]:
-    """Non-streaming fallback — used by tests."""
+    """Non-streaming — used by tests."""
     client = _get_client()
     try:
         response = client.chat.completions.create(
@@ -40,44 +40,42 @@ def generate_sentences(prompt: str) -> list[str]:
 def stream_sentences(prompt: str):
     """
     Generator that yields SSE-formatted strings.
-    Buffers the full response, parses it once, then streams
-    words one-by-one per sentence for a live typewriter effect.
+    Uses Groq's native stream=True so tokens arrive as they are generated —
+    no artificial delay. Accumulates per-sentence partials and emits them as
+    each new token arrives, then emits the final parsed sentences event.
     """
-    import time
-
     client = _get_client()
     try:
-        response = client.chat.completions.create(
+        stream = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.8,
             max_tokens=300,
-            timeout=9,
+            timeout=15,
+            stream=True,
         )
     except Exception as e:
         yield f"data: {json.dumps({'error': str(e)})}\n\n"
         return
 
-    raw = response.choices[0].message.content.strip()
-    sentences = _parse_sentences(raw)
+    full_text = ""
+    for chunk in stream:
+        delta = chunk.choices[0].delta.content or ""
+        if not delta:
+            continue
+        full_text += delta
 
+        # Emit a partial update on every token so the client sees live output
+        payload = json.dumps({"index": 0, "partial": full_text.strip()})
+        yield f"data: {payload}\n\n"
+
+    # Parse final text and emit the structured sentences event
+    sentences = _parse_sentences(full_text.strip())
     if not sentences:
-        yield f"data: {json.dumps({'error': 'parse_failed'})}\n\n"
-        return
+        # Fallback: treat the whole response as one sentence
+        sentences = [full_text.strip()] if full_text.strip() else []
 
     sentences = sentences[:3]
-
-    # Stream each sentence word by word
-    for idx, sentence in enumerate(sentences):
-        words = sentence.split()
-        partial = ""
-        for word in words:
-            partial = partial + (" " if partial else "") + word
-            payload = json.dumps({"index": idx, "partial": partial})
-            yield f"data: {payload}\n\n"
-            time.sleep(0.04)
-
-    # Final event with all complete sentences
     yield f"data: {json.dumps({'sentences': sentences})}\n\n"
     yield "data: [DONE]\n\n"
 

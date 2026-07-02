@@ -1,24 +1,28 @@
 PROFILES = {
     "alex": {
         "id": "alex",
-        "display_name": "Alex",
-        "phrasing_style": "formal",
-        "common_contact": "my colleague Dr. Patel",
+        "display_name": "Maria",
+        "subtitle": "Formal · Stroke survivor",
+        "phrasing_style": "formal and polite",
+        "common_contact": "my physical therapist Dr. Patel",
         "sample_phrases": [
-            "I would appreciate it if we could reschedule our appointment.",
-            "Could you please pass me a glass of water?",
-            "I am experiencing some discomfort and would like assistance.",
+            "I would appreciate some assistance with that, if it is not too much trouble.",
+            "Could you please help me get to the bathroom?",
+            "I am not feeling well and would like to speak with my doctor.",
+            "Would it be possible to reschedule my appointment for tomorrow?",
         ],
     },
     "jordan": {
         "id": "jordan",
-        "display_name": "Jordan",
-        "phrasing_style": "casual",
-        "common_contact": "my roommate Sam",
+        "display_name": "Jake",
+        "subtitle": "Casual · TBI recovery",
+        "phrasing_style": "casual and direct",
+        "common_contact": "my buddy Marcus",
         "sample_phrases": [
-            "Hey, can we push the meeting back?",
-            "Can you grab me some water?",
-            "I'm not feeling great, can you help me out?",
+            "Hey, can you help me out?",
+            "I really need some water right now.",
+            "Can we hang out later? I'm up for it.",
+            "I'm not doing great — can someone check on me?",
         ],
     },
 }
@@ -31,4 +35,7 @@ def get_profile(profile_id: str) -> dict:
 
 
 def list_profiles() -> list[dict]:
-    return [{"id": p["id"], "display_name": p["display_name"]} for p in PROFILES.values()]
+    return [
+        {"id": p["id"], "display_name": p["display_name"], "subtitle": p["subtitle"]}
+        for p in PROFILES.values()
+    ]

@@ -1,45 +1,52 @@
 CONCEPTS = [
+    # Emergency (first — highest-stakes use case)
+    {"id": "chest_pain", "label": "Chest Pain", "category": "Emergency", "icon": "chest_pain"},
+    {"id": "fall", "label": "Fall", "category": "Emergency", "icon": "fall"},
+    {"id": "help_me", "label": "Help Me", "category": "Emergency", "icon": "help_me"},
+    {"id": "call_emergency", "label": "Call 911", "category": "Emergency", "icon": "call_emergency"},
+    {"id": "cant_breathe", "label": "Can't Breathe", "category": "Emergency", "icon": "cant_breathe"},
+
     # People
-    {"id": "friend", "label": "Friend", "category": "People", "icon": "👫"},
-    {"id": "doctor", "label": "Doctor", "category": "People", "icon": "👨‍⚕️"},
-    {"id": "family", "label": "Family", "category": "People", "icon": "👨‍👩‍👧"},
-    {"id": "caregiver", "label": "Caregiver", "category": "People", "icon": "🤝"},
-    {"id": "nurse", "label": "Nurse", "category": "People", "icon": "👩‍⚕️"},
+    {"id": "friend", "label": "Friend", "category": "People", "icon": "friend"},
+    {"id": "doctor", "label": "Doctor", "category": "People", "icon": "doctor"},
+    {"id": "family", "label": "Family", "category": "People", "icon": "family"},
+    {"id": "caregiver", "label": "Caregiver", "category": "People", "icon": "caregiver"},
+    {"id": "nurse", "label": "Nurse", "category": "People", "icon": "nurse"},
 
     # Food
-    {"id": "coffee", "label": "Coffee", "category": "Food", "icon": "☕"},
-    {"id": "water", "label": "Water", "category": "Food", "icon": "💧"},
-    {"id": "food", "label": "Food", "category": "Food", "icon": "🍽️"},
-    {"id": "breakfast", "label": "Breakfast", "category": "Food", "icon": "🥐"},
-    {"id": "snack", "label": "Snack", "category": "Food", "icon": "🍎"},
+    {"id": "coffee", "label": "Coffee", "category": "Food", "icon": "coffee"},
+    {"id": "water", "label": "Water", "category": "Food", "icon": "water"},
+    {"id": "food", "label": "Food", "category": "Food", "icon": "food"},
+    {"id": "breakfast", "label": "Breakfast", "category": "Food", "icon": "breakfast"},
+    {"id": "snack", "label": "Snack", "category": "Food", "icon": "snack"},
 
     # Places
-    {"id": "home", "label": "Home", "category": "Places", "icon": "🏠"},
-    {"id": "hospital", "label": "Hospital", "category": "Places", "icon": "🏥"},
-    {"id": "outside", "label": "Outside", "category": "Places", "icon": "🌳"},
-    {"id": "bathroom", "label": "Bathroom", "category": "Places", "icon": "🚿"},
-    {"id": "store", "label": "Store", "category": "Places", "icon": "🛒"},
+    {"id": "home", "label": "Home", "category": "Places", "icon": "home"},
+    {"id": "hospital", "label": "Hospital", "category": "Places", "icon": "hospital"},
+    {"id": "outside", "label": "Outside", "category": "Places", "icon": "outside"},
+    {"id": "bathroom", "label": "Bathroom", "category": "Places", "icon": "bathroom"},
+    {"id": "store", "label": "Store", "category": "Places", "icon": "store"},
 
     # Needs
-    {"id": "help", "label": "Help", "category": "Needs", "icon": "🆘"},
-    {"id": "rest", "label": "Rest", "category": "Needs", "icon": "😴"},
-    {"id": "tomorrow", "label": "Tomorrow", "category": "Needs", "icon": "📅"},
-    {"id": "now", "label": "Now", "category": "Needs", "icon": "⚡"},
-    {"id": "later", "label": "Later", "category": "Needs", "icon": "⏰"},
+    {"id": "help", "label": "Help", "category": "Needs", "icon": "help"},
+    {"id": "rest", "label": "Rest", "category": "Needs", "icon": "rest"},
+    {"id": "tomorrow", "label": "Tomorrow", "category": "Needs", "icon": "tomorrow"},
+    {"id": "now", "label": "Now", "category": "Needs", "icon": "now"},
+    {"id": "later", "label": "Later", "category": "Needs", "icon": "later"},
 
     # Health
-    {"id": "pain", "label": "Pain", "category": "Health", "icon": "😣"},
-    {"id": "tired", "label": "Tired", "category": "Health", "icon": "😓"},
-    {"id": "medicine", "label": "Medicine", "category": "Health", "icon": "💊"},
-    {"id": "appointment", "label": "Appointment", "category": "Health", "icon": "🗓️"},
-    {"id": "dizzy", "label": "Dizzy", "category": "Health", "icon": "😵"},
+    {"id": "pain", "label": "Pain", "category": "Health", "icon": "pain"},
+    {"id": "tired", "label": "Tired", "category": "Health", "icon": "tired"},
+    {"id": "medicine", "label": "Medicine", "category": "Health", "icon": "medicine"},
+    {"id": "appointment", "label": "Appointment", "category": "Health", "icon": "appointment"},
+    {"id": "dizzy", "label": "Dizzy", "category": "Health", "icon": "dizzy"},
 
     # Emotions
-    {"id": "happy", "label": "Happy", "category": "Emotions", "icon": "😊"},
-    {"id": "scared", "label": "Scared", "category": "Emotions", "icon": "😨"},
-    {"id": "sad", "label": "Sad", "category": "Emotions", "icon": "😢"},
-    {"id": "frustrated", "label": "Frustrated", "category": "Emotions", "icon": "😤"},
-    {"id": "grateful", "label": "Grateful", "category": "Emotions", "icon": "🙏"},
+    {"id": "happy", "label": "Happy", "category": "Emotions", "icon": "happy"},
+    {"id": "scared", "label": "Scared", "category": "Emotions", "icon": "scared"},
+    {"id": "sad", "label": "Sad", "category": "Emotions", "icon": "sad"},
+    {"id": "frustrated", "label": "Frustrated", "category": "Emotions", "icon": "frustrated"},
+    {"id": "grateful", "label": "Grateful", "category": "Emotions", "icon": "grateful"},
 ]
 
 CONCEPT_MAP = {c["id"]: c for c in CONCEPTS}

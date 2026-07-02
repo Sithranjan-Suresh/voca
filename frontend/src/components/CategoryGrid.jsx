@@ -21,10 +21,11 @@ export default function CategoryGrid({ selectedConceptIds, onToggle }) {
           const selectedInCat = CONCEPTS_BY_CATEGORY[cat].filter(c =>
             selectedConceptIds.includes(c.id)
           ).length
+          const isEmergency = cat === 'Emergency'
           return (
             <button
               key={cat}
-              className={`category-tile${isOpen ? ' active' : ''}`}
+              className={`category-tile${isOpen ? ' active' : ''}${isEmergency ? ' emergency' : ''}`}
               onClick={() => toggleCategory(cat)}
               aria-expanded={isOpen}
             >

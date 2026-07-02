@@ -219,33 +219,7 @@ button:focus-visible {
   flex-shrink: 0;
 }
 
-/* ── Profile toggle ────────────────────────────────────────── */
-.profile-toggle {
-  display: flex;
-  background: var(--clr-bg);
-  border: 1px solid var(--clr-border);
-  border-radius: 99px;
-  padding: 3px;
-  gap: 2px;
-}
-
-.profile-btn {
-  min-width: 56px;
-  height: 30px;
-  padding: 0 10px;
-  border-radius: 99px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--clr-text-secondary);
-  transition: background 0.15s, color 0.15s;
-}
-
-.profile-btn.active {
-  background: var(--clr-accent);
-  color: #fff;
-}
-
-.high-contrast .profile-btn.active { color: #000; }
+/* profile-toggle styles are defined in the additions block below */
 
 /* ── Contrast toggle ───────────────────────────────────────── */
 .contrast-toggle {
@@ -695,3 +669,238 @@ button:focus-visible {
   opacity: 0.35;
   cursor: not-allowed;
 }
+
+/* ── Sentence attribution + reject hint ────────────────────── */
+.sentence-attribution {
+  font-size: 11px;
+  color: var(--clr-text-muted);
+  font-style: italic;
+  margin-top: -4px;
+}
+
+.reject-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.reject-hint {
+  font-size: 9px;
+  color: var(--clr-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* ── Emergency category tile ───────────────────────────────── */
+.category-tile.emergency {
+  border-color: #e53e3e;
+  background: #fff5f5;
+}
+
+.category-tile.emergency .category-tile-label {
+  color: #c53030;
+}
+
+.category-tile.emergency.active {
+  background: #fed7d7;
+  border-color: #c53030;
+}
+
+.category-tile.emergency .category-badge {
+  background: #c53030;
+}
+
+.high-contrast .category-tile.emergency {
+  border-color: #ff4444;
+  background: #1a0000;
+}
+
+.high-contrast .category-tile.emergency .category-tile-label {
+  color: #ff4444;
+}
+
+/* ── Profile toggle with subtitle ──────────────────────────── */
+.profile-toggle {
+  display: flex;
+  background: var(--clr-bg);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  gap: 2px;
+}
+
+.profile-btn {
+  min-width: 72px;
+  height: auto;
+  padding: 5px 10px;
+  border-radius: calc(var(--radius-md) - 2px);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--clr-text-secondary);
+  transition: background 0.15s, color 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.profile-btn-name {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.profile-btn-sub {
+  font-size: 9px;
+  font-weight: 400;
+  opacity: 0.7;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.profile-btn.active {
+  background: var(--clr-accent);
+  color: #fff;
+}
+
+.profile-btn.active .profile-btn-sub { opacity: 0.85; }
+.high-contrast .profile-btn.active { color: #000; }
+
+/* ── How it works strip ────────────────────────────────────── */
+.how-it-works {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 16px;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+.hiw-step {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--clr-text-secondary);
+}
+
+.hiw-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.hiw-label {
+  white-space: nowrap;
+}
+
+.hiw-arrow {
+  font-size: 12px;
+  color: var(--clr-text-muted);
+  margin: 0 2px;
+}
+
+/* ── Quick-start scenarios ─────────────────────────────────── */
+.quickstart-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quickstart-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--clr-text-muted);
+}
+
+.quickstart-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quickstart-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  background: var(--clr-surface);
+  border: 1.5px solid var(--clr-border);
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--clr-text-secondary);
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  box-shadow: var(--shadow-card);
+}
+
+.quickstart-chip:hover {
+  border-color: var(--clr-accent);
+  color: var(--clr-accent);
+  background: var(--clr-accent-bg);
+}
+
+.quickstart-chip.quickstart-urgent {
+  border-color: #e53e3e;
+  color: #c53030;
+  background: #fff5f5;
+}
+
+.quickstart-chip.quickstart-urgent:hover {
+  background: #fed7d7;
+  border-color: #c53030;
+}
+
+.high-contrast .quickstart-chip.quickstart-urgent {
+  border-color: #ff4444;
+  color: #ff4444;
+  background: #1a0000;
+}
+
+/* ── Generate button pulse when ready ──────────────────────── */
+@keyframes generate-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(91,71,224,0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(91,71,224,0); }
+}
+
+.btn-generate-ready {
+  animation: generate-pulse 1.8s ease-in-out infinite;
+}
+
+/* ── Splash progress bar ───────────────────────────────────── */
+.splash-progress-bar {
+  width: 100%;
+  height: 3px;
+  background: #e8e6f0;
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.splash-progress-fill {
+  height: 100%;
+  background: var(--clr-accent);
+  border-radius: 99px;
+  transition: width 0.1s linear;
+}
+
+/* ── SVG icon sizing in concept grid ──────────────────────── */
+.concept-icon span[style] svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Override old profile-toggle pill style ────────────────── */
+.profile-toggle:not(.profile-toggle) {
+  /* neutralised — new styles above take precedence */
+}
+

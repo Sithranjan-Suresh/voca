@@ -17,7 +17,6 @@ export default function SelectionTray({ selectedConceptIds, onDeselect, onGenera
               onClick={() => onDeselect(concept.id)}
               aria-label={`Remove ${concept.label}`}
             >
-              <span aria-hidden="true">{concept.icon}</span>
               {concept.label}
               <span className="chip-remove" aria-hidden="true">✕</span>
             </button>
@@ -35,7 +34,7 @@ export default function SelectionTray({ selectedConceptIds, onDeselect, onGenera
           <p className="tray-hint" role="status">Select at least 2 ideas</p>
         )}
         <button
-          className="btn-generate"
+          className={`btn-generate${canGenerate ? ' btn-generate-ready' : ''}`}
           onClick={onGenerate}
           disabled={!canGenerate}
           aria-disabled={!canGenerate}
