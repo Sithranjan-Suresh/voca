@@ -1,9 +1,13 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { CONCEPTS } from '../data/concepts'
 
+const EMERGENCY_IDS = new Set(['chest_pain', 'fall', 'help_me', 'call_emergency', 'cant_breathe'])
+
 export default function SelectionTray({ selectedConceptIds, onDeselect, onGenerate, onClearAll }) {
   const selected = selectedConceptIds.map(id => CONCEPTS.find(c => c.id === id)).filter(Boolean)
-  const canGenerate = selectedConceptIds.length >= 2
+  const hasEmergency = selectedConceptIds.some(id => EMERGENCY_IDS.has(id))
+  const minRequired = hasEmergency ? 1 : 2
+  const canGenerate = selectedConceptIds.length >= minRequired
 
   return (
     <div className="selection-tray" role="region" aria-label="Selected concepts">
@@ -40,7 +44,9 @@ export default function SelectionTray({ selectedConceptIds, onDeselect, onGenera
           </button>
         )}
         {!canGenerate && selectedConceptIds.length > 0 && (
-          <p className="tray-hint" role="status">Select at least 2 ideas</p>
+          <p className="tray-hint" role="status">
+            {hasEmergency ? 'Select at least 1 concept' : 'Select at least 2 ideas'}
+          </p>
         )}
         <motion.button
           className={`btn-generate${canGenerate ? ' btn-generate-ready' : ''}`}
