@@ -1,4 +1,11 @@
+import { motion, AnimatePresence } from 'framer-motion'
 import SentenceOption from './SentenceOption'
+
+const panelAnim = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 140, damping: 16 } },
+  exit:    { opacity: 0, y: -10, transition: { duration: 0.15 } },
+}
 
 export default function GenerationResultPanel({
   status, sentences, streamingText, activeProfileId, profileNames, onReject, onRetry
@@ -7,17 +14,17 @@ export default function GenerationResultPanel({
 
   if (status === 'loading') {
     return (
-      <div className="result-panel result-loading" role="status" aria-live="polite">
+      <motion.div {...panelAnim} className="result-panel result-loading" role="status" aria-live="polite">
         <div className="spinner" aria-hidden="true" />
         <p>Generating in {profileLabel}'s voice…</p>
-      </div>
+      </motion.div>
     )
   }
 
   if (status === 'streaming') {
     const displaySentences = streamingText.length > 0 ? streamingText : sentences
     return (
-      <div className="result-panel" role="region" aria-live="polite">
+      <motion.div {...panelAnim} className="result-panel" role="region" aria-live="polite">
         <p className="result-label">
           <span className="profile-voice-badge">In {profileLabel}'s voice</span>
         </p>
@@ -33,34 +40,42 @@ export default function GenerationResultPanel({
             </p>
           </div>
         )}
-      </div>
+      </motion.div>
     )
   }
 
   if (status === 'error') {
     return (
-      <div className="result-panel result-error" role="alert">
+      <motion.div {...panelAnim} className="result-panel result-error" role="alert">
         <p>Something went wrong. Please try again.</p>
         <button className="btn-retry" onClick={onRetry}>Try again</button>
-      </div>
+      </motion.div>
     )
   }
 
   if (status === 'success' && sentences.length > 0) {
     return (
-      <div className="result-panel" role="region" aria-label="Generated sentences" aria-live="polite">
+      <motion.div {...panelAnim} className="result-panel" role="region" aria-label="Generated sentences" aria-live="polite">
         <p className="result-label">
           <span className="profile-voice-badge">In {profileLabel}'s voice</span>
         </p>
-        {sentences.map((sentence, i) => (
-          <SentenceOption
-            key={`${sentence}-${i}`}
-            sentence={sentence}
-            profileId={activeProfileId}
-            onReject={() => onReject(sentence)}
-          />
-        ))}
-      </div>
+        <AnimatePresence>
+          {sentences.map((sentence, i) => (
+            <motion.div
+              key={`${sentence}-${i}`}
+              initial={{ opacity: 0, x: -12 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.08, type: 'spring', stiffness: 150, damping: 16 }}
+            >
+              <SentenceOption
+                sentence={sentence}
+                profileId={activeProfileId}
+                onReject={() => onReject(sentence)}
+              />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
     )
   }
 
