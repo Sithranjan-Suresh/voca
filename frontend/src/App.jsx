@@ -10,6 +10,7 @@ import HowItWorks from './components/HowItWorks'
 import QuickStartScenarios from './components/QuickStartScenarios'
 import SavedPhrases from './components/SavedPhrases'
 import QuickEmergency from './components/QuickEmergency'
+import AboutCard from './components/AboutCard'
 import './App.css'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8001'
@@ -187,7 +188,9 @@ export default function App() {
         <main className="app-main">
           <HowItWorks />
 
-          <QuickEmergency profileId={activeProfileId} />
+          <AboutCard />
+
+          <QuickEmergency />
 
           <QuickStartScenarios onSelectScenario={handleSelectScenario} />
 

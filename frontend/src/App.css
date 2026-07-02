@@ -455,12 +455,12 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
 
 .quick-emergency-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
 }
 
 .qe-btn {
-  padding: 10px 6px;
+  padding: 12px 8px;
   background: var(--white);
   color: var(--red);
   border: var(--border);
@@ -477,6 +477,16 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
   gap: 4px;
   line-height: 1.2;
   text-align: center;
+}
+
+/* Call 911 spans both columns — most critical phrase gets full-width prominence */
+.qe-btn.qe-full {
+  grid-column: 1 / -1;
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+  font-size: 14px;
+  padding: 14px 8px;
 }
 
 .qe-btn:hover:not(:disabled)  { transform: translate(-1px, -1px); box-shadow: var(--shadow); }
@@ -1162,3 +1172,123 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
 
 .btn-remove-saved:hover  { background: var(--red-tint); border-color: var(--red); color: var(--red); transform: translate(-1px, -1px); box-shadow: var(--shadow); }
 .btn-remove-saved:active { transform: translate(2px, 2px); box-shadow: none; }
+
+/* ── About card ─────────────────────────────────────────────── */
+.about-card {
+  background: var(--white);
+  border: var(--border);
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about-stat {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--black);
+  line-height: 1.4;
+}
+
+.about-stat-number {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--violet);
+}
+
+.about-body {
+  font-size: 14px;
+  color: #3d3d3d;
+  line-height: 1.55;
+}
+
+.about-differentiator {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--black);
+  line-height: 1.5;
+  background: var(--yellow-tint);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  border-left: 4px solid var(--yellow);
+}
+
+/* ── QuickStart collapsible toggle ─────────────────────────── */
+.quickstart-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quickstart-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: var(--border-2);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--black);
+  cursor: pointer;
+  width: fit-content;
+  transition: background 0.12s, transform 0.1s;
+}
+
+.quickstart-toggle:hover  { background: var(--bg); transform: translate(-1px, -1px); }
+.quickstart-toggle:active { transform: translate(1px, 1px); }
+
+.quickstart-toggle-arrow {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.quickstart-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 2px;
+}
+
+.quickstart-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 14px;
+  background: var(--white);
+  border: var(--border-2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.quickstart-chip:hover  { transform: translate(-1px, -1px); box-shadow: var(--shadow); }
+.quickstart-chip:active { transform: translate(2px, 2px); box-shadow: none; }
+
+.quickstart-chip.quickstart-urgent {
+  border-color: var(--red);
+  background: var(--red-tint);
+}
+
+.quickstart-chip-main {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--black);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.quickstart-urgent-icon { font-size: 12px; }
+
+.quickstart-chip-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--red);
+}

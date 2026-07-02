@@ -1,27 +1,11 @@
-import { useState, useEffect } from 'react'
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8001'
-
-// Cache only positive results — re-check if previously unavailable
-let elevenLabsAvailable = null
-async function checkElevenLabs() {
-  if (elevenLabsAvailable === true) return true
-  try {
-    const res = await fetch(`${API_BASE}/tts/status`)
-    elevenLabsAvailable = res.ok ? true : null  // null = retry next time
-    return res.ok
-  } catch {
-    elevenLabsAvailable = null
-    return false
-  }
-}
+import { useState } from 'react'
+import { useTTS } from '../hooks/useTTS'
 
 const SAVED_KEY = 'voca_saved_phrases'
 
 function getSaved() {
   try {
     const raw = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]')
-    // Migrate legacy string[] format
     return raw.map(item => typeof item === 'string' ? { text: item, profileId: 'jordan' } : item)
   } catch { return [] }
 }
@@ -29,62 +13,16 @@ function getSaved() {
 function setSaved(list) { localStorage.setItem(SAVED_KEY, JSON.stringify(list)) }
 
 export default function SentenceOption({ sentence, profileId, onReject }) {
-  const [speaking, setSpeaking] = useState(false)
-  const [hdActive, setHdActive] = useState(false)
+  const { speaking, hdActive, speak } = useTTS(profileId)
+  const isSpeaking = speaking === sentence
   const [saved, setSavedState] = useState(() => getSaved().some(item => item.text === sentence))
-
-  useEffect(() => {
-    checkElevenLabs().then(ok => setHdActive(!!ok))
-  }, [])
-
-  async function handleSpeak() {
-    if (speaking) return
-    setSpeaking(true)
-
-    const useHD = await checkElevenLabs()
-    if (useHD) {
-      try {
-        const res = await fetch(`${API_BASE}/tts`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: sentence, profile_id: profileId }),
-        })
-        if (res.ok) {
-          const blob = await res.blob()
-          const url = URL.createObjectURL(blob)
-          const audio = new Audio(url)
-          audio.onended = () => { setSpeaking(false); URL.revokeObjectURL(url) }
-          audio.onerror = () => { setSpeaking(false); URL.revokeObjectURL(url); speakFallback() }
-          await audio.play()
-          return
-        }
-      } catch {
-        // fall through
-      }
-    }
-
-    speakFallback()
-  }
-
-  function speakFallback() {
-    if (!('speechSynthesis' in window)) { setSpeaking(false); return }
-    window.speechSynthesis.cancel()
-    const utterance = new SpeechSynthesisUtterance(sentence)
-    utterance.rate = 0.95
-    utterance.onend = () => setSpeaking(false)
-    utterance.onerror = () => setSpeaking(false)
-    window.speechSynthesis.speak(utterance)
-  }
 
   function handleSave() {
     const current = getSaved()
     const alreadySaved = current.some(item => item.text === sentence)
-    let updated
-    if (alreadySaved) {
-      updated = current.filter(item => item.text !== sentence)
-    } else {
-      updated = [{ text: sentence, profileId }, ...current].slice(0, 20)
-    }
+    const updated = alreadySaved
+      ? current.filter(item => item.text !== sentence)
+      : [{ text: sentence, profileId }, ...current].slice(0, 20)
     setSaved(updated)
     setSavedState(!alreadySaved)
   }
@@ -97,14 +35,14 @@ export default function SentenceOption({ sentence, profileId, onReject }) {
       </p>
       <div className="sentence-actions">
         <button
-          className={`btn-speak${speaking ? ' speaking' : ''}`}
-          onClick={handleSpeak}
-          disabled={speaking}
-          aria-label={speaking ? 'Speaking…' : 'Speak this sentence'}
+          className={`btn-speak${isSpeaking ? ' speaking' : ''}`}
+          onClick={() => speak(sentence)}
+          disabled={isSpeaking}
+          aria-label={isSpeaking ? 'Speaking…' : 'Speak this sentence'}
         >
-          <span className={`speak-icon${speaking ? ' pulse' : ''}`} aria-hidden="true">🔊</span>
-          {speaking ? 'Speaking…' : 'Speak'}
-          {hdActive && !speaking && (
+          <span className={`speak-icon${isSpeaking ? ' pulse' : ''}`} aria-hidden="true">🔊</span>
+          {isSpeaking ? 'Speaking…' : 'Speak'}
+          {hdActive && !isSpeaking && (
             <span className="hd-badge" aria-label="HD Voice via ElevenLabs">HD</span>
           )}
         </button>
@@ -121,7 +59,7 @@ export default function SentenceOption({ sentence, profileId, onReject }) {
           <button
             className="btn-reject"
             onClick={onReject}
-            disabled={speaking}
+            disabled={isSpeaking}
             aria-label="Reject this sentence and get another"
           >
             👎

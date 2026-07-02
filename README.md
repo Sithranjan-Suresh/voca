@@ -9,12 +9,22 @@ Voca inverts the AAC model: instead of asking users to construct a sentence (the
 aphasia makes hard), users tap disconnected concepts and Voca reconstructs the full sentence
 for them — personalized to how they actually talk.
 
+## Features
+
+- **Concept-tap AAC flow** — tap 2–4 concept icons (no typing, no sentence construction) → Voca generates a complete, natural sentence via LLM
+- **Live streaming output** — sentences stream token-by-token via SSE; first option appears in under 1 second
+- **Dual persona system** — Jake (casual, TBI recovery) and Maria (formal, stroke survivor); identical taps produce genuinely different phrasing
+- **ElevenLabs HD voice** — per-profile voice mapping (Jake→Josh, Maria→Rachel) with Web Speech API fallback
+- **Quick Emergency panel** — 5 life-critical phrases (Chest Pain, Can't Breathe, Call 911) speak instantly, no AI wait
+- **No-repeat regeneration** — tap 👎 as many times as needed; rejected sentences are permanently excluded
+- **Saved phrases** — star any sentence to save it; phrases are profile-tagged and persist across sessions
+- **Progressive Web App** — installable on mobile, offline service worker, full manifest
+- **High-contrast mode** — WCAG-friendly toggle for low-vision users
+- **Single-concept emergency** — Emergency category concepts work with just one tap (vs. 2+ for others)
+
 ## Demo
 
-> **[Live demo link — add after deployment]**
->
-> Suggested demo path: tap **Emergency → Chest Pain + Now + Help Me** → Generate → Speak.
-> Then switch profile (Jake ↔ Maria) and Generate again to see personalized phrasing.
+> Suggested demo path: tap **Emergency → Chest Pain** → Generate (single concept) → Speak → then switch to Maria → Generate to see personalized phrasing.
 
 ## How it works
 
