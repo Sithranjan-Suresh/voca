@@ -1,6 +1,5 @@
 import os
 import json
-import time
 from groq import Groq
 
 _client = None
@@ -40,13 +39,10 @@ def generate_sentences(prompt: str) -> list[str]:
 
 def stream_sentences(prompt: str):
     """
-    Generator that yields SSE-formatted strings.
-
-    Uses Groq stream=True so inference starts immediately (real streaming,
-    inspectable). Accumulates the full response, parses it once the stream
-    ends, then does a per-word typewriter reveal of each parsed sentence.
-    This gives genuine AI streaming under the hood with clean, readable
-    sentence output — not raw JSON fragments.
+    True progressive streaming: emits each sentence the moment Groq finishes
+    generating it. The model outputs numbered lines (1. 2. 3.); we detect
+    completed lines from the token stream and push them immediately — no
+    artificial delays, real latency drives the reveal.
     """
     client = _get_client()
     try:
@@ -58,44 +54,55 @@ def stream_sentences(prompt: str):
             timeout=15,
             stream=True,
         )
-        full_text = ""
-        for chunk in stream:
-            delta = chunk.choices[0].delta.content or ""
-            full_text += delta
     except Exception as e:
         yield f"data: {json.dumps({'error': str(e)})}\n\n"
         return
 
-    sentences = _parse_sentences(full_text.strip())
-    if not sentences:
-        yield f"data: {json.dumps({'error': 'parse_failed', 'raw': full_text[:200]})}\n\n"
+    buffer = ""
+    sentences = []
+
+    try:
+        for chunk in stream:
+            token = chunk.choices[0].delta.content or ""
+            buffer += token
+
+            # Flush completed lines as they arrive
+            while "\n" in buffer:
+                line, buffer = buffer.split("\n", 1)
+                line = line.strip()
+                if not line:
+                    continue
+                for i, prefix in enumerate(["1.", "2.", "3."]):
+                    if line.startswith(prefix):
+                        text = line[len(prefix):].strip().strip('"').strip("'")
+                        if text:
+                            sentences.append(text)
+                            yield f"data: {json.dumps({'index': i, 'partial': text})}\n\n"
+                        break
+    except Exception as e:
+        yield f"data: {json.dumps({'error': str(e)})}\n\n"
         return
 
-    sentences = sentences[:3]
+    # Handle final line with no trailing newline
+    if buffer.strip():
+        line = buffer.strip()
+        for i, prefix in enumerate(["1.", "2.", "3."]):
+            if line.startswith(prefix):
+                text = line[len(prefix):].strip().strip('"').strip("'")
+                if text:
+                    sentences.append(text)
+                    yield f"data: {json.dumps({'index': i, 'partial': text})}\n\n"
+                break
 
-    # Typewriter reveal: emit each sentence word-by-word across all 3 slots
-    for idx, sentence in enumerate(sentences):
-        words = sentence.split()
-        partial = ""
-        for word in words:
-            partial = partial + (" " if partial else "") + word
-            payload = json.dumps({"index": idx, "partial": partial})
-            yield f"data: {payload}\n\n"
-            time.sleep(0.045)
-
-    # Final event with all complete sentences
-    yield f"data: {json.dumps({'sentences': sentences})}\n\n"
+    if sentences:
+        yield f"data: {json.dumps({'sentences': sentences[:3]})}\n\n"
+    else:
+        yield f"data: {json.dumps({'error': 'parse_failed'})}\n\n"
     yield "data: [DONE]\n\n"
 
 
 def _parse_sentences(raw: str) -> list[str]:
-    try:
-        data = json.loads(raw)
-        if isinstance(data, list) and all(isinstance(s, str) for s in data):
-            return [s.strip() for s in data if s.strip()]
-    except json.JSONDecodeError:
-        pass
-
+    # Primary: numbered list format (1. 2. 3.)
     lines = []
     for line in raw.splitlines():
         line = line.strip()
@@ -103,7 +110,17 @@ def _parse_sentences(raw: str) -> list[str]:
             continue
         for prefix in ["1.", "2.", "3.", "1)", "2)", "3)"]:
             if line.startswith(prefix):
-                lines.append(line[len(prefix):].strip().strip('"'))
+                lines.append(line[len(prefix):].strip().strip('"').strip("'"))
                 break
+    if lines:
+        return lines
 
-    return lines if lines else []
+    # Fallback: JSON array
+    try:
+        data = json.loads(raw)
+        if isinstance(data, list) and all(isinstance(s, str) for s in data):
+            return [s.strip() for s in data if s.strip()]
+    except json.JSONDecodeError:
+        pass
+
+    return []

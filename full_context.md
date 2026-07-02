@@ -39,7 +39,9 @@
 - **Correction flow**: a thumbs-down regenerates or surfaces an alternate option, so the interaction survives a wrong first guess.
 - **High-contrast mode toggle** (real, functioning, not just described).
 
-**Explicitly not built for submission** (stated only as future vision): Emergency Mode, Caregiver Mode (editable profiles UI), offline mode, eye-tracking/switch-control compatibility, long-term embedding-based memory, emotion detection, multi-turn conversation memory.
+**Built for submission:** Emergency category with 1-concept generation (chest pain, can't breathe, fall, help me, call 911) and a Quick Emergency panel with 5 pre-built phrases that speak instantly (no AI latency), Body category (head, chest, back, stomach, arm, leg), profile-aware saved phrases, ElevenLabs HD voice per profile, high-contrast mode, onboarding splash.
+
+**Explicitly deferred** (stated only as future vision): Caregiver Mode (editable profiles UI), offline mode, eye-tracking/switch-control compatibility, long-term embedding-based memory, emotion detection, multi-turn conversation memory.
 
 ## Key Differentiators
 

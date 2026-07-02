@@ -37,13 +37,14 @@ export default function OnboardingSplash({ onDismiss }) {
         <div className="splash-icon" aria-hidden="true">🗣️</div>
         <h2 className="splash-title">Meet Voca</h2>
         <p className="splash-stat">
-          <strong>Over 2 million Americans</strong> live with aphasia — a condition that leaves
-          intent fully intact but makes producing words and sentences nearly impossible.
+          <strong>2.5 million Americans — 50 million worldwide</strong> live with aphasia — a
+          condition that leaves intent fully intact but makes producing words and sentences
+          nearly impossible.
         </p>
         <p className="splash-body">
           Imagine trying to say <em>"my chest hurts"</em> after a stroke — and not being able
-          to find the words. Existing tools still require sentence construction: the very thing
-          aphasia makes hard.
+          to find the words. Existing AAC tools still require sentence construction: the very
+          thing aphasia makes hard.
           <br /><br />
           Voca inverts this. <strong>Tap a few concepts. Get your sentence. Speak.</strong>
         </p>

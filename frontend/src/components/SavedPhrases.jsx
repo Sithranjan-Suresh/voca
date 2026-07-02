@@ -4,81 +4,84 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8001'
 const SAVED_KEY = 'voca_saved_phrases'
 
 function getSaved() {
-  try { return JSON.parse(localStorage.getItem(SAVED_KEY) || '[]') } catch { return [] }
+  try {
+    const raw = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]')
+    return raw.map(item => typeof item === 'string' ? { text: item, profileId: 'jordan' } : item)
+  } catch { return [] }
 }
 
 export default function SavedPhrases({ profileId }) {
-  const [phrases, setPhrases] = useState(getSaved)
+  const [allPhrases, setAllPhrases] = useState(getSaved)
   const [speaking, setSpeaking] = useState(null)
+  const phrases = allPhrases.filter(p => p.profileId === profileId)
 
   useEffect(() => {
-    function sync() { setPhrases(getSaved()) }
+    function sync() { setAllPhrases(getSaved()) }
     window.addEventListener('storage', sync)
-    // Poll for changes within same tab (SentenceOption writes localStorage)
-    const t = setInterval(() => setPhrases(getSaved()), 500)
+    const t = setInterval(() => setAllPhrases(getSaved()), 500)
     return () => { window.removeEventListener('storage', sync); clearInterval(t) }
   }, [])
 
   if (phrases.length === 0) return null
 
-  async function handleSpeak(sentence) {
-    if (speaking === sentence) return
-    setSpeaking(sentence)
+  async function handleSpeak(text) {
+    if (speaking === text) return
+    setSpeaking(text)
 
     try {
       const res = await fetch(`${API_BASE}/tts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: sentence, profile_id: profileId }),
+        body: JSON.stringify({ text, profile_id: profileId }),
       })
       if (res.ok) {
         const blob = await res.blob()
         const url = URL.createObjectURL(blob)
         const audio = new Audio(url)
         audio.onended = () => { setSpeaking(null); URL.revokeObjectURL(url) }
-        audio.onerror = () => { setSpeaking(null); URL.revokeObjectURL(url); speakFallback(sentence) }
+        audio.onerror = () => { setSpeaking(null); URL.revokeObjectURL(url); speakFallback(text) }
         await audio.play()
         return
       }
     } catch {}
 
-    speakFallback(sentence)
+    speakFallback(text)
   }
 
-  function speakFallback(sentence) {
+  function speakFallback(text) {
     if (!('speechSynthesis' in window)) { setSpeaking(null); return }
     window.speechSynthesis.cancel()
-    const u = new SpeechSynthesisUtterance(sentence)
+    const u = new SpeechSynthesisUtterance(text)
     u.rate = 0.95
     u.onend = () => setSpeaking(null)
     u.onerror = () => setSpeaking(null)
     window.speechSynthesis.speak(u)
   }
 
-  function handleRemove(sentence) {
-    const updated = getSaved().filter(s => s !== sentence)
+  function handleRemove(text) {
+    const updated = getSaved().filter(item => item.text !== text)
     localStorage.setItem(SAVED_KEY, JSON.stringify(updated))
-    setPhrases(updated)
+    setAllPhrases(updated)
   }
 
   return (
     <div className="saved-phrases-panel">
-      <p className="saved-phrases-title">★ Saved phrases</p>
-      {phrases.map((phrase, i) => (
+      <p className="saved-phrases-title">★ Saved phrases — {profileId === 'jordan' ? 'Jake' : 'Maria'}</p>
+      {phrases.map((item, i) => (
         <div key={i} className="saved-phrase-row">
-          <p className="saved-phrase-text">{phrase}</p>
+          <p className="saved-phrase-text">{item.text}</p>
           <div className="saved-phrase-actions">
             <button
-              className={`btn-speak-sm${speaking === phrase ? ' speaking' : ''}`}
-              onClick={() => handleSpeak(phrase)}
-              disabled={speaking === phrase}
+              className={`btn-speak-sm${speaking === item.text ? ' speaking' : ''}`}
+              onClick={() => handleSpeak(item.text)}
+              disabled={speaking === item.text}
               aria-label="Speak this saved phrase"
             >
-              🔊 {speaking === phrase ? 'Speaking…' : 'Speak'}
+              🔊 {speaking === item.text ? 'Speaking…' : 'Speak'}
             </button>
             <button
               className="btn-remove-saved"
-              onClick={() => handleRemove(phrase)}
+              onClick={() => handleRemove(item.text)}
               aria-label="Remove saved phrase"
             >
               ✕

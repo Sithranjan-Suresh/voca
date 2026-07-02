@@ -87,4 +87,5 @@
 | Category icon custom illustration/branding polish | P2 | Nice-to-have visual polish, cut first if time runs short |
 | Any additional categories/concepts beyond the minimum 6x4 set | P2 | Breadth beyond what the demo script actually uses adds risk without adding score |
 | Caregiver-editable profile UI | Out of scope | Explicitly deferred to Future Expansion per full_context.md |
-| Emergency Mode / Offline Mode / Eye-tracking | Out of scope | Explicitly deferred to Future Expansion per full_context.md |
+| Emergency Mode (Quick Emergency panel + 1-concept generation) | P0 | BUILT — instant TTS, no AI latency, 5 pre-built phrases |
+| Offline Mode / Eye-tracking | Out of scope | Explicitly deferred to Future Expansion per full_context.md |

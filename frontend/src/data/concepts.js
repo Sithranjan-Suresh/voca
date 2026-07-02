@@ -47,9 +47,17 @@ export const CONCEPTS = [
   { id: "sad",        label: "Sad",        category: "Emotions", icon: "sad" },
   { id: "frustrated", label: "Frustrated", category: "Emotions", icon: "frustrated" },
   { id: "grateful",   label: "Grateful",   category: "Emotions", icon: "grateful" },
+
+  // Body
+  { id: "head",    label: "Head",    category: "Body", icon: "head" },
+  { id: "chest",   label: "Chest",   category: "Body", icon: "chest" },
+  { id: "back",    label: "Back",    category: "Body", icon: "back" },
+  { id: "stomach", label: "Stomach", category: "Body", icon: "stomach" },
+  { id: "arm",     label: "Arm",     category: "Body", icon: "arm" },
+  { id: "leg",     label: "Leg",     category: "Body", icon: "leg" },
 ]
 
-export const CATEGORIES = ["Emergency", "People", "Food", "Places", "Needs", "Health", "Emotions"]
+export const CATEGORIES = ["Emergency", "People", "Food", "Places", "Needs", "Health", "Emotions", "Body"]
 
 // SVG path data for category tiles (24×24 viewBox, stroke-based)
 // SVG path strings for the 7 category tiles
@@ -61,6 +69,7 @@ export const CATEGORY_SVGS = {
   Needs:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a4 4 0 0 0-8 0v5"/><path d="M10 18H5l2 3 2-3h-1"/><path d="M19 18h-5l2 3 2-3h-1"/><line x1="12" y1="14" x2="12" y2="21"/></svg>`,
   Health:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
   Emotions:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`,
+  Body:      `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 7v6M9 10h6M9 17l-1 4M15 17l1 4M9 13l-3 4M15 13l3 4"/></svg>`,
 }
 
 export const CONCEPTS_BY_CATEGORY = CATEGORIES.reduce((acc, cat) => {

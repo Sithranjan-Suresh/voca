@@ -17,13 +17,21 @@ async function checkElevenLabs() {
 }
 
 const SAVED_KEY = 'voca_saved_phrases'
-function getSaved() { try { return JSON.parse(localStorage.getItem(SAVED_KEY) || '[]') } catch { return [] } }
+
+function getSaved() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]')
+    // Migrate legacy string[] format
+    return raw.map(item => typeof item === 'string' ? { text: item, profileId: 'jordan' } : item)
+  } catch { return [] }
+}
+
 function setSaved(list) { localStorage.setItem(SAVED_KEY, JSON.stringify(list)) }
 
 export default function SentenceOption({ sentence, profileId, onReject }) {
   const [speaking, setSpeaking] = useState(false)
   const [hdActive, setHdActive] = useState(false)
-  const [saved, setSavedState] = useState(() => getSaved().includes(sentence))
+  const [saved, setSavedState] = useState(() => getSaved().some(item => item.text === sentence))
 
   useEffect(() => {
     checkElevenLabs().then(ok => setHdActive(!!ok))
@@ -70,14 +78,15 @@ export default function SentenceOption({ sentence, profileId, onReject }) {
 
   function handleSave() {
     const current = getSaved()
+    const alreadySaved = current.some(item => item.text === sentence)
     let updated
-    if (current.includes(sentence)) {
-      updated = current.filter(s => s !== sentence)
+    if (alreadySaved) {
+      updated = current.filter(item => item.text !== sentence)
     } else {
-      updated = [sentence, ...current].slice(0, 20)
+      updated = [{ text: sentence, profileId }, ...current].slice(0, 20)
     }
     setSaved(updated)
-    setSavedState(updated.includes(sentence))
+    setSavedState(!alreadySaved)
   }
 
   return (

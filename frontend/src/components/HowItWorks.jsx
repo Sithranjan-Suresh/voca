@@ -39,7 +39,7 @@ export default function HowItWorks() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.4 }}
       >
-        Not autocomplete — Voca reconstructs full sentences from disconnected concepts.
+        Not autocomplete — Voca reconstructs full sentences from disconnected concepts. No typing required.
       </motion.p>
     </div>
   )

@@ -47,6 +47,14 @@ CONCEPTS = [
     {"id": "sad", "label": "Sad", "category": "Emotions", "icon": "sad"},
     {"id": "frustrated", "label": "Frustrated", "category": "Emotions", "icon": "frustrated"},
     {"id": "grateful", "label": "Grateful", "category": "Emotions", "icon": "grateful"},
+
+    # Body
+    {"id": "head",    "label": "Head",    "category": "Body", "icon": "head"},
+    {"id": "chest",   "label": "Chest",   "category": "Body", "icon": "chest"},
+    {"id": "back",    "label": "Back",    "category": "Body", "icon": "back"},
+    {"id": "stomach", "label": "Stomach", "category": "Body", "icon": "stomach"},
+    {"id": "arm",     "label": "Arm",     "category": "Body", "icon": "arm"},
+    {"id": "leg",     "label": "Leg",     "category": "Body", "icon": "leg"},
 ]
 
 CONCEPT_MAP = {c["id"]: c for c in CONCEPTS}

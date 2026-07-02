@@ -9,9 +9,10 @@ import Toast from './components/Toast'
 import HowItWorks from './components/HowItWorks'
 import QuickStartScenarios from './components/QuickStartScenarios'
 import SavedPhrases from './components/SavedPhrases'
+import QuickEmergency from './components/QuickEmergency'
 import './App.css'
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8001'
 const PROFILE_NAMES = { jordan: 'Jake', alex: 'Maria' }
 
 export default function App() {
@@ -171,11 +172,11 @@ export default function App() {
       {showSplash && <OnboardingSplash onDismiss={() => setShowSplash(false)} />}
       {toast && <Toast message={toast} />}
 
-      <div className={`app${contrastMode ? ' high-contrast' : ''}`}>
+      <div className={`app profile-${activeProfileId}${contrastMode ? ' high-contrast' : ''}`}>
         <header className="app-header">
           <div className="app-brand">
             <h1 className="app-title">Voca</h1>
-            <span className="app-tagline">A voice for 2M+ Americans with aphasia</span>
+            <span className="app-tagline">When words don't come — Voca speaks.</span>
           </div>
           <div className="header-controls">
             <ProfileToggle activeProfileId={activeProfileId} onChange={setActiveProfileId} />
@@ -185,6 +186,8 @@ export default function App() {
 
         <main className="app-main">
           <HowItWorks />
+
+          <QuickEmergency profileId={activeProfileId} />
 
           <QuickStartScenarios onSelectScenario={handleSelectScenario} />
 

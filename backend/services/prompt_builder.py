@@ -72,8 +72,10 @@ Given the concepts below, produce exactly 3 distinct sentence options that the u
 - Match the user's {style} phrasing style (not generic — sound like the sample phrases above)
 - Be different from each other in structure or emphasis
 {exclusion_block}
-Return ONLY a JSON array of 3 strings and nothing else. Example format:
-["Sentence one.", "Sentence two.", "Sentence three."]
+Return exactly 3 sentences numbered like this, one per line, nothing else:
+1. First complete sentence.
+2. Second complete sentence.
+3. Third complete sentence.
 
 Concepts: {concepts_str}"""
 

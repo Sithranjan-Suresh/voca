@@ -49,6 +49,14 @@ export const CONCEPT_ICONS = {
   sad:        <svg viewBox="0 0 24 24" {...s}><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>,
   frustrated: <svg viewBox="0 0 24 24" {...s}><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M7.5 7.5l3 2M16.5 7.5l-3 2"/></svg>,
   grateful:   <svg viewBox="0 0 24 24" {...s}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>,
+
+  // Body
+  head:    <svg viewBox="0 0 24 24" {...s}><circle cx="12" cy="8" r="5"/><path d="M9 13.5V21M15 13.5V21M9 21h6"/></svg>,
+  chest:   <svg viewBox="0 0 24 24" {...s}><rect x="4" y="6" width="16" height="14" rx="2"/><path d="M4 10h16M12 10v10M8 6V4M16 6V4"/></svg>,
+  back:    <svg viewBox="0 0 24 24" {...s}><path d="M12 2v20M8 4l4-2 4 2M8 20l4 2 4-2"/><path d="M5 8c2 1 5 1.5 7 1.5S17 9 19 8M5 16c2-1 5-1.5 7-1.5s5 .5 7 1.5"/></svg>,
+  stomach: <svg viewBox="0 0 24 24" {...s}><path d="M8 3c0 0-5 2-5 8s3 9 9 9 9-3 9-9-5-8-5-8"/><path d="M8 3h8"/><path d="M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>,
+  arm:     <svg viewBox="0 0 24 24" {...s}><path d="M6 3l2 4-1 3 2 3 1 4 3 4"/><path d="M6 3c3 0 6 1 7 4"/><path d="M7 10c2 0 5 .5 6 3"/><path d="M9 13c1.5 0 4 .5 5 4"/></svg>,
+  leg:     <svg viewBox="0 0 24 24" {...s}><path d="M9 2v12l-3 5a1 1 0 0 0 .8 1.5H11l2-3"/><path d="M15 2v12l3 5a1 1 0 0 1-.8 1.5H13l-2-3"/><line x1="9" y1="2" x2="15" y2="2"/></svg>,
 }
 
 export default function ConceptSVGIcon({ id, size = 24, color = "currentColor" }) {
