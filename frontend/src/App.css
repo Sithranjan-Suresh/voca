@@ -1300,3 +1300,46 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
   line-height: 1.4;
   margin-top: -4px;
 }
+
+/* ── Result panel label row ─────────────────────────────────── */
+.result-label-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 4px;
+}
+
+.result-subline {
+  font-size: 11px;
+  color: #737373;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* ── Switch profile prompt ──────────────────────────────────── */
+.btn-switch-profile {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: var(--border-2);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--violet);
+  cursor: pointer;
+  transition: background 0.12s, transform 0.1s;
+}
+.btn-switch-profile:hover  { background: var(--violet-tint); transform: translate(-1px, -1px); }
+.btn-switch-profile:active { transform: translate(1px, 1px); }
+
+.category-tile-sub {
+  font-size: 9px;
+  font-weight: 600;
+  color: #737373;
+  text-align: center;
+  line-height: 1.2;
+  margin-top: 1px;
+}

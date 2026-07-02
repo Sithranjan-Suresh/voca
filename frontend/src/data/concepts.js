@@ -56,7 +56,7 @@ export const CONCEPTS = [
   { id: "stop",      label: "Stop",      category: "Basics", icon: "stop" },
   { id: "wait",      label: "Wait",      category: "Basics", icon: "wait" },
   { id: "more",      label: "More",      category: "Basics", icon: "more" },
-  { id: "again",     label: "Again",     category: "Basics", icon: "again" },
+  { id: "again",     label: "Repeat",    category: "Basics", icon: "again" },
 
   // Body
   { id: "head",    label: "Head",    category: "Body", icon: "head" },

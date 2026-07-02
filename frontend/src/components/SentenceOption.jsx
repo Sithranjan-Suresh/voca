@@ -30,9 +30,6 @@ export default function SentenceOption({ sentence, profileId, onReject }) {
   return (
     <div className="sentence-option">
       <p className="sentence-text">{sentence}</p>
-      <p className="sentence-attribution">
-        Reconstructed from your tapped concepts — not predicted text.
-      </p>
       <div className="sentence-actions">
         <button
           className={`btn-speak${isSpeaking ? ' speaking' : ''}`}

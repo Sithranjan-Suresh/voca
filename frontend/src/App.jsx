@@ -7,7 +7,6 @@ import SelectionTray from './components/SelectionTray'
 import GenerationResultPanel from './components/GenerationResultPanel'
 import OnboardingSplash from './components/OnboardingSplash'
 import Toast from './components/Toast'
-import HowItWorks from './components/HowItWorks'
 import QuickStartScenarios from './components/QuickStartScenarios'
 import SavedPhrases from './components/SavedPhrases'
 import QuickEmergency from './components/QuickEmergency'
@@ -27,7 +26,6 @@ export default function App() {
   const [toast, setToast] = useState(null)
   const [showSplash, setShowSplash] = useState(true)
   const [streamingText, setStreamingText] = useState([])
-  const [showHowItWorks, setShowHowItWorks] = useState(false)
   const isFirstMount = useRef(true)
   const trayRef = useRef(null)
   const resultRef = useRef(null)
@@ -193,20 +191,6 @@ export default function App() {
         <main className="app-main">
           <AboutCard />
 
-          <div className="quickstart-section">
-            <button className="quickstart-toggle" onClick={() => setShowHowItWorks(v => !v)} aria-expanded={showHowItWorks}>
-              <span className="quickstart-toggle-arrow" aria-hidden="true">{showHowItWorks ? '▾' : '▸'}</span>
-              How it works
-            </button>
-            <AnimatePresence>
-              {showHowItWorks && (
-                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.2 }} style={{ overflow: 'hidden' }}>
-                  <HowItWorks />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
           <QuickEmergency />
 
           <QuickStartScenarios onSelectScenario={handleSelectScenario} />
@@ -237,6 +221,7 @@ export default function App() {
               profileNames={PROFILE_NAMES}
               onReject={handleReject}
               onRetry={handleRetry}
+              onSwitchProfile={() => setActiveProfileId(activeProfileId === 'jordan' ? 'alex' : 'jordan')}
             />
             </div>
           )}

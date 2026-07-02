@@ -44,15 +44,17 @@ Voca inverts the AAC model entirely:
 Aphasia affects more Americans than Parkinson's disease, muscular dystrophy, or cerebral palsy — but has far fewer technology resources. Voca makes the highest-stakes moments (medical emergencies, expressing pain, communicating with family) possible for people who have lost the ability to speak spontaneously.
 
 ## Demo path
-1. Open app
-2. Tap **Emergency** category → tap **Chest Pain** (single concept — emergency mode)
-3. Tap **Generate** → first sentence streams in <1s
-4. Tap **Speak** → ElevenLabs HD voice plays
-5. Tap 👎 → see a different sentence (rejected sentence permanently excluded)
-6. Switch to **Maria** profile (top right)
-7. Tap **Generate** again with same concept → different phrasing, different voice
-8. Tap **Quick Emergency → Call 911** → speaks instantly, no AI wait
-9. Star a sentence → appear in **Saved Phrases** panel
+1. Open app → read the "my chest hurts" context in the problem card
+2. Tap **Emergency** category → tap **Chest Pain** (Jake profile, single concept)
+3. Tap **Generate** → first sentence streams in <1s: *"Chest is killing me. Call 911."*
+4. Tap **Speak** → ElevenLabs Josh voice plays — casual, punchy, sounds like Jake
+5. Tap **"Try Maria's voice →"** in the result panel (appears after generation)
+6. Tap **Generate** again — same concept, Maria's voice: *"I am experiencing significant chest pain and require immediate medical attention."*
+7. Tap **Speak** → ElevenLabs Rachel voice plays — formal, measured, sounds like Maria
+8. **This is the demo-winning moment:** same 3 taps, two completely different humans speaking.
+9. Tap 👎 on any sentence → new generation, rejected sentence permanently excluded
+10. Tap **Quick Emergency → Call 911** → speaks instantly, no AI wait
+11. Star a sentence → appears in **Saved Phrases** for instant future access
 
 ## GitHub
 https://github.com/Sithranjan-Suresh/voca

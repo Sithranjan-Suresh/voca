@@ -8,9 +8,11 @@ const panelAnim = {
 }
 
 export default function GenerationResultPanel({
-  status, sentences, streamingText, activeProfileId, profileNames, onReject, onRetry
+  status, sentences, streamingText, activeProfileId, profileNames, onReject, onRetry, onSwitchProfile
 }) {
   const profileLabel = profileNames?.[activeProfileId] || activeProfileId
+  const otherProfileId = activeProfileId === 'jordan' ? 'alex' : 'jordan'
+  const otherProfileLabel = profileNames?.[otherProfileId] || otherProfileId
 
   if (status === 'loading') {
     return (
@@ -56,9 +58,10 @@ export default function GenerationResultPanel({
   if (status === 'success' && sentences.length > 0) {
     return (
       <motion.div {...panelAnim} className="result-panel" role="region" aria-label="Generated sentences" aria-live="polite">
-        <p className="result-label">
+        <div className="result-label-row">
           <span className="profile-voice-badge">In {profileLabel}'s voice</span>
-        </p>
+          <span className="result-subline">Reconstructed from your concepts — not predicted text</span>
+        </div>
         <AnimatePresence>
           {sentences.map((sentence, i) => (
             <motion.div
@@ -75,6 +78,11 @@ export default function GenerationResultPanel({
             </motion.div>
           ))}
         </AnimatePresence>
+        {onSwitchProfile && (
+          <button className="btn-switch-profile" onClick={onSwitchProfile}>
+            Try {otherProfileLabel}'s voice →
+          </button>
+        )}
       </motion.div>
     )
   }

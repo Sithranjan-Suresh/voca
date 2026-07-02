@@ -24,6 +24,10 @@ export default function CategoryGrid({ selectedConceptIds, onToggle }) {
 
   const regularCategories = CATEGORIES.filter(c => c !== 'Emergency')
 
+  const CATEGORY_SUBS = {
+    Basics: 'Yes · No · Please · Thank You',
+  }
+
   return (
     <section className="category-section" aria-label="Concept categories">
 
@@ -118,6 +122,9 @@ export default function CategoryGrid({ selectedConceptIds, onToggle }) {
                 dangerouslySetInnerHTML={{ __html: CATEGORY_SVGS[cat] }}
               />
               <span className="category-tile-label">{cat}</span>
+              {CATEGORY_SUBS[cat] && (
+                <span className="category-tile-sub">{CATEGORY_SUBS[cat]}</span>
+              )}
             </motion.button>
           )
         })}
