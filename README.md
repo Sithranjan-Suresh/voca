@@ -22,7 +22,7 @@ for them — personalized to how they actually talk.
 |------|-------------|
 | 1. Tap concepts | Select 2–4 icons across categories (Emergency, People, Food, Places, Needs, Health, Emotions) |
 | 2. Generate | Voca sends your concepts + active profile to an LLM which reconstructs a complete, natural sentence |
-| 3. Speak | Tap **Speak** — the sentence plays aloud via browser TTS. Tap 👎 to get a different option. |
+| 3. Speak | Tap **Speak** — the sentence plays aloud via ElevenLabs HD voice (or browser TTS fallback). Tap 👎 to get a different option. |
 
 ## Key differentiators
 
@@ -33,9 +33,10 @@ for them — personalized to how they actually talk.
 
 ## Tech stack
 
-- **Frontend:** React + Vite, Web Speech API (browser-native TTS, zero cost)
+- **Frontend:** React + Vite, mobile-first, high-contrast mode
 - **Backend:** FastAPI (Python) with real Groq streaming (`stream=True`)
 - **LLM inference:** Groq API — Llama 3.3 70B, free tier, sub-1s generation
+- **TTS:** ElevenLabs (HD, profile-matched voice) with Web Speech API fallback
 - **Frontend hosting:** Vercel (free tier)
 - **Backend hosting:** Render (free tier)
 
@@ -53,7 +54,7 @@ for them — personalized to how they actually talk.
 ```bash
 cd backend
 pip install -r requirements.txt
-cp .env.example .env          # add your GROQ_API_KEY
+cp .env.example .env          # add GROQ_API_KEY and ELEVENLABS_API_KEY
 uvicorn main:app --reload --port 8001
 ```
 
@@ -62,6 +63,7 @@ uvicorn main:app --reload --port 8001
 ```bash
 cd frontend
 npm install
+cp .env.example .env          # sets VITE_API_URL=http://localhost:8001
 npm run dev
 ```
 
