@@ -8,6 +8,7 @@ import OnboardingSplash from './components/OnboardingSplash'
 import Toast from './components/Toast'
 import HowItWorks from './components/HowItWorks'
 import QuickStartScenarios from './components/QuickStartScenarios'
+import SavedPhrases from './components/SavedPhrases'
 import './App.css'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
@@ -200,6 +201,8 @@ export default function App() {
               onClearAll={clearAll}
             />
           </div>
+
+          <SavedPhrases profileId={activeProfileId} />
 
           {generationStatus !== 'idle' && (
             <GenerationResultPanel

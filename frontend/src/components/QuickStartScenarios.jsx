@@ -1,20 +1,18 @@
 const SCENARIOS = [
   {
-    label: "Pain · Chest · Now",
-    concepts: ["chest_pain", "now", "help_me"],
-    emoji: "🚨",
+    label: "Chest Pain · Can't Breathe · Help Me",
+    concepts: ["chest_pain", "cant_breathe", "help_me"],
+    sub: "Try the highest-stakes scenario →",
     urgent: true,
   },
   {
     label: "Friend · Coffee · Tomorrow",
     concepts: ["friend", "coffee", "tomorrow"],
-    emoji: "☕",
     urgent: false,
   },
   {
     label: "Doctor · Scared · Appointment",
     concepts: ["doctor", "scared", "appointment"],
-    emoji: "🩺",
     urgent: false,
   },
 ]
@@ -31,8 +29,11 @@ export default function QuickStartScenarios({ onSelectScenario }) {
             onClick={() => onSelectScenario(s.concepts)}
             aria-label={`Load scenario: ${s.label}`}
           >
-            <span aria-hidden="true">{s.emoji}</span>
-            {s.label}
+            <span className="quickstart-chip-main">
+              {s.urgent && <span className="quickstart-urgent-icon" aria-hidden="true">🚨</span>}
+              {s.label}
+            </span>
+            {s.sub && <span className="quickstart-chip-sub">{s.sub}</span>}
           </button>
         ))}
       </div>

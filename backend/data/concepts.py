@@ -53,7 +53,14 @@ CONCEPT_MAP = {c["id"]: c for c in CONCEPTS}
 
 
 def get_labels(concept_ids: list[str]) -> list[str]:
-    return [CONCEPT_MAP[cid]["label"] for cid in concept_ids if cid in CONCEPT_MAP]
+    labels = []
+    for cid in concept_ids:
+        if cid in CONCEPT_MAP:
+            labels.append(CONCEPT_MAP[cid]["label"])
+        else:
+            # Fallback: humanize the raw ID so unknown concepts still reach the LLM
+            labels.append(cid.replace("_", " ").title())
+    return labels
 
 
 def get_concepts_by_category() -> dict[str, list[dict]]:

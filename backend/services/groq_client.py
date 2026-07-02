@@ -1,5 +1,6 @@
 import os
 import json
+import time
 from groq import Groq
 
 _client = None
@@ -40,9 +41,12 @@ def generate_sentences(prompt: str) -> list[str]:
 def stream_sentences(prompt: str):
     """
     Generator that yields SSE-formatted strings.
-    Uses Groq's native stream=True so tokens arrive as they are generated —
-    no artificial delay. Accumulates per-sentence partials and emits them as
-    each new token arrives, then emits the final parsed sentences event.
+
+    Uses Groq stream=True so inference starts immediately (real streaming,
+    inspectable). Accumulates the full response, parses it once the stream
+    ends, then does a per-word typewriter reveal of each parsed sentence.
+    This gives genuine AI streaming under the hood with clean, readable
+    sentence output — not raw JSON fragments.
     """
     client = _get_client()
     try:
@@ -54,28 +58,32 @@ def stream_sentences(prompt: str):
             timeout=15,
             stream=True,
         )
+        full_text = ""
+        for chunk in stream:
+            delta = chunk.choices[0].delta.content or ""
+            full_text += delta
     except Exception as e:
         yield f"data: {json.dumps({'error': str(e)})}\n\n"
         return
 
-    full_text = ""
-    for chunk in stream:
-        delta = chunk.choices[0].delta.content or ""
-        if not delta:
-            continue
-        full_text += delta
-
-        # Emit a partial update on every token so the client sees live output
-        payload = json.dumps({"index": 0, "partial": full_text.strip()})
-        yield f"data: {payload}\n\n"
-
-    # Parse final text and emit the structured sentences event
     sentences = _parse_sentences(full_text.strip())
     if not sentences:
-        # Fallback: treat the whole response as one sentence
-        sentences = [full_text.strip()] if full_text.strip() else []
+        yield f"data: {json.dumps({'error': 'parse_failed', 'raw': full_text[:200]})}\n\n"
+        return
 
     sentences = sentences[:3]
+
+    # Typewriter reveal: emit each sentence word-by-word across all 3 slots
+    for idx, sentence in enumerate(sentences):
+        words = sentence.split()
+        partial = ""
+        for word in words:
+            partial = partial + (" " if partial else "") + word
+            payload = json.dumps({"index": idx, "partial": partial})
+            yield f"data: {payload}\n\n"
+            time.sleep(0.045)
+
+    # Final event with all complete sentences
     yield f"data: {json.dumps({'sentences': sentences})}\n\n"
     yield "data: [DONE]\n\n"
 

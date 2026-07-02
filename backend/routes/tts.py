@@ -6,6 +6,19 @@ from services.elevenlabs_client import synthesize, TTSError
 router = APIRouter()
 
 
+@router.get("/tts/status")
+def tts_status():
+    """Returns 200 if ElevenLabs key is configured, 503 otherwise."""
+    import os
+    if os.getenv("ELEVENLABS_API_KEY"):
+        return {"status": "available", "provider": "elevenlabs"}
+    return Response(
+        content='{"status":"unavailable"}',
+        status_code=503,
+        media_type="application/json",
+    )
+
+
 class TTSRequest(BaseModel):
     text: str
     profile_id: str = "jordan"

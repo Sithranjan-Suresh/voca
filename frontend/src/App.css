@@ -899,6 +899,285 @@ button:focus-visible {
   height: 100%;
 }
 
+/* ── Category tile SVG icons ───────────────────────────────── */
+.category-tile-svg {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-tile-svg svg {
+  width: 100%;
+  height: 100%;
+  stroke: var(--clr-text-secondary);
+}
+
+.category-tile.active .category-tile-svg svg {
+  stroke: var(--clr-accent);
+}
+
+.category-tile.emergency .category-tile-svg svg {
+  stroke: #c53030;
+}
+
+.category-tile.emergency.active .category-tile-svg svg {
+  stroke: #c53030;
+}
+
+/* ── Emergency hero tile ───────────────────────────────────── */
+.emergency-hero-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 10px;
+}
+
+.emergency-hero {
+  width: 100%;
+  aspect-ratio: unset !important;
+  min-height: 72px !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  padding: 14px 16px !important;
+  text-align: left;
+}
+
+.emergency-hero .category-tile-label {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.emergency-hero-sub {
+  font-size: 11px;
+  color: #9b2c2c;
+  font-weight: 400;
+  margin-left: auto;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+.high-contrast .emergency-hero-sub {
+  color: #ff8888;
+}
+
+/* ── HowItWorks wrapper + tagline ──────────────────────────── */
+.how-it-works-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hiw-tagline {
+  font-size: 12px;
+  color: var(--clr-accent);
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+/* ── QuickStart dominant emergency chip ────────────────────── */
+.quickstart-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 7px 12px;
+  background: var(--clr-surface);
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--clr-text-secondary);
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  box-shadow: var(--shadow-card);
+  text-align: left;
+}
+
+.quickstart-chip:hover {
+  border-color: var(--clr-accent);
+  color: var(--clr-accent);
+  background: var(--clr-accent-bg);
+}
+
+.quickstart-chip-main {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+}
+
+.quickstart-urgent-icon {
+  font-size: 14px;
+}
+
+.quickstart-chip-sub {
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.quickstart-chip.quickstart-urgent {
+  width: 100%;
+  border-color: #e53e3e;
+  color: #c53030;
+  background: #fff5f5;
+  padding: 12px 16px;
+}
+
+.quickstart-chip.quickstart-urgent:hover {
+  background: #fed7d7;
+  border-color: #c53030;
+}
+
+.quickstart-chip.quickstart-urgent .quickstart-chip-sub {
+  color: #9b2c2c;
+  opacity: 1;
+}
+
+.high-contrast .quickstart-chip.quickstart-urgent {
+  border-color: #ff4444;
+  color: #ff4444;
+  background: #1a0000;
+}
+
+/* ── Sentence attribution — feature label, not footnote ────── */
+.sentence-attribution {
+  font-size: 12px;
+  color: var(--clr-accent);
+  font-weight: 500;
+  padding-left: 8px;
+  border-left: 2px solid var(--clr-accent);
+  margin-top: -2px;
+  opacity: 0.8;
+}
+
+/* ── HD Voice badge ────────────────────────────────────────── */
+.hd-badge {
+  font-size: 9px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 4px;
+  padding: 1px 4px;
+  letter-spacing: 0.05em;
+  margin-left: 4px;
+}
+
+.btn-speak.speaking .hd-badge { display: none; }
+
+/* ── Save phrase button ────────────────────────────────────── */
+.btn-save {
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--clr-text-muted);
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+  flex-shrink: 0;
+}
+
+.btn-save:hover {
+  color: #d69e2e;
+  border-color: #d69e2e;
+  background: #fffff0;
+}
+
+.btn-save.saved {
+  color: #d69e2e;
+  border-color: #d69e2e;
+  background: #fffff0;
+}
+
+/* ── Saved phrases panel ───────────────────────────────────── */
+.saved-phrases-panel {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.saved-phrases-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #d69e2e;
+}
+
+.saved-phrase-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--clr-bg);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+}
+
+.saved-phrase-text {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--clr-text-primary);
+}
+
+.saved-phrase-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn-speak-sm {
+  height: 36px;
+  padding: 0 12px;
+  background: var(--clr-accent);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.btn-speak-sm:hover { background: var(--clr-accent-dark); }
+.btn-speak-sm.speaking { background: var(--clr-success); }
+.high-contrast .btn-speak-sm { color: #000; }
+
+.btn-remove-saved {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--clr-border);
+  font-size: 12px;
+  color: var(--clr-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.btn-remove-saved:hover {
+  color: var(--clr-danger);
+  border-color: var(--clr-danger);
+}
+
 /* ── Override old profile-toggle pill style ────────────────── */
 .profile-toggle:not(.profile-toggle) {
   /* neutralised — new styles above take precedence */
